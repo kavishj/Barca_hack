@@ -1,0 +1,11 @@
+# Pinned environment that regenerates the submission byte-for-byte (tested on Python 3.11.9).
+# make_submission.py needs numpy, pandas and PyAV (av decodes the stadium audio from the tactical
+# mp4 for referee-whistle detection; no ffmpeg install needed, PyAV ships its own).
+numpy==2.4.6
+pandas==2.2.3
+av==18.1.0
+
+# Optional, for the analysis tools only (none of them is needed to regenerate the submission):
+#   tools/timeline.py                    matplotlib==3.10.1
+#   tools/fit_emissions.py               scikit-learn==1.7.1
+#   tools/label_tool.py, tools/review.py Pillow==9.5.0
