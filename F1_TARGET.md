@@ -150,3 +150,25 @@ fits and average boundary posteriors with the same weights as states. No learned
 ensemble weights or main-validation calibration. Include graph/8 and graph/tree/2
 as first-listed controls. Select pooled OOF spellF1 before one main evaluation.
 Archive all results and retain the original prediction files as immutable controls.
+
+### Experiment 13 outcome
+
+The best new two-model mixture scored 0.4787 OOF spellF1; the best three-way
+mixture scored 0.5586. Neither beat graph/tree at 0.5754, which was retained.
+Its validation file reproduced experiment 11, so there is no new main improvement.
+
+## Experiment 14, fixed before fitting
+
+The supplied automatic Smart Tagging XML contains separate tactical-phase types
+and 26 throw-in tags, while the existing features sum phase teams and omit throw-in
+restarts. Preserve the original rich observations and add each automatic event
+code/type separately for each team: active interval count, signed seconds to the
+nearest interval start, and signed seconds to its end, capped to a 30-second
+neighbourhood. Construct these inside each graded half, without reference labels.
+Do not copy automatic tag intervals into output labels or add hard restart rules.
+
+Run exactly experiment 11's symmetric factorized boosted model and its predeclared
+tree-only/equal-graph-blend cost comparison, changing only the rich feature cache.
+Reuse the same folds, purge, audio PCA and fixed tree settings. Select on training
+OOF, then score only the selection on unchanged main validation. Report against
+the existing 0.5754 OOF leader and 0.7200 main-score leader separately.

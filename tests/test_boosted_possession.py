@@ -11,6 +11,17 @@ from learned_possession.features import FeatureCache
 
 
 class BoostedTests(unittest.TestCase):
+    def test_automatic_tag_offsets_isolate_halves_and_rename_teams(self):
+        from boosted_possession.tags import enrich
+        rich=FeatureCache(np.zeros((1000,1)),('activity',),25,((1,0,399),(2,600,999)),{})
+        observations=[('home','throw_in',20,90),('away','build_up',310,380),('away','throw_in',610,690)]
+        a=enrich(rich,observations)
+        b=enrich(rich,[('away' if club=='home' else 'home',name,first,stop) for club,name,first,stop in observations])
+        np.testing.assert_array_equal(swap(a.x,a.names),b.x)
+        self.assertEqual(a.x[30,a.names.index('home_auto_throw_in_active')],1)
+        self.assertAlmostEqual(a.x[30,a.names.index('home_auto_throw_in_start_offset_s')],.4)
+        self.assertTrue(np.isnan(a.x[600,a.names.index('home_auto_throw_in_start_offset_s')]))
+
     def test_equal_ensemble_preserves_distributions_and_rejects_invalid_scores(self):
         from boosted_possession.ensemble import average
         scores=dict(a=(np.tile([.8,.1,.1],(8,1)),np.zeros(8)),
