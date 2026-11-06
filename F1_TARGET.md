@@ -75,3 +75,38 @@ Select the highest pooled training-window OOF official spellF1; ties prefer the
 simpler existing architecture and then the fixed decoder. Record the choice
 before main validation scoring. Report per-window variability, frame macro F1,
 predicted/true spell counts and boundary metrics beside ranking spellF1.
+
+### Experiment 10 outcome
+
+All 24 new fits completed. None beat the existing control's 0.5123 OOF spellF1.
+Fixed-decoder OOF scores were 0.4746 (balanced loss), 0.4949 (contact history),
+and 0.4982 (both); adaptive decoding reduced each score. The training-only
+selection retained the original model and reproduced its prediction file exactly.
+Main validation therefore remains 0.7200. No other new arm was scored on it.
+
+## Experiment 11, fixed before fitting
+
+Test a different inductive bias: regularized histogram-boosted binary trees for
+dead versus live, home versus away conditional on live play, and boundaries.
+Combine the unchanged rich physical/fine-audio observations with the original
+fold-fitted 32 audio PCA components. Add observation shifts at -10, -3, -1, +1,
++3 and +10 seconds for ball motion, activity, distance margin, team motion,
+contact/reception history, visibility and whistle observations. Shifts stay
+inside each half; missing observations stay missing. Exclude absolute frame/time
+and the supplied known-dead flag from fitting. No new labels or pseudo-labels.
+
+Augment each training frame by swapping teams and corresponding labels. Average
+both perspectives at inference so H/A equivariance and dead-state invariance
+hold exactly. Train on a fixed 5 Hz frame grid, preserving natural class counts.
+Use 250 iterations, learning rate 0.05, at most 7 leaves, minimum 50 samples per
+leaf, L2 10, seed 0, and no early stopping or internal validation split. These
+settings are fixed for every model and fold, not selected using scores.
+
+Use the same five whole-window folds and 60-second purge. Compare the trees
+alone and their equal arithmetic posterior blend with the original graph model.
+For each, test switch costs 1, 2, 4 and 8 with the original segment decoder;
+reuse fold-training duration fits. Include graph/fixed-8 as the first-listed
+control. Choose highest pooled OOF spellF1, breaking ties by listed order, save
+the decision, then evaluate only that selection on the unchanged main validation.
+Archive every OOF result, including failures. This is exploratory model selection
+on reused windows and cannot demonstrate independent full-match performance.
