@@ -14,7 +14,7 @@ def tensors(graph,first,stop,half,device):
     return {key:torch.as_tensor(value,device=device) for key,value in graph.window(first,stop,half).items()}
 
 
-def train_seed(global_x,pair_x,graph,codes,selected,config,arm,seed,device,model_factory=RelationalNet):
+def train_seed(global_x,pair_x,graph,codes,selected,config,arm,seed,device,model_factory=RelationalNet,observation_transform=None):
     deterministic(seed)
     rng=np.random.default_rng(seed)
     model=model_factory(global_x.shape[1],pair_x.shape[2],graph.nodes.shape[2],config,arm).to(device)
@@ -47,6 +47,8 @@ def train_seed(global_x,pair_x,graph,codes,selected,config,arm,seed,device,model
             gx=torch.from_numpy(global_x[a:b]).to(device)
             px=torch.from_numpy(pair_x[a:b]).to(device)
             data=tensors(graph,a,b,half,device)
+            if observation_transform is not None:
+                gx,px,data=observation_transform(gx,px,data)
             logits,boundary_logits,spans=model(gx,px,data)
             core=slice(first-a,stop-a)
             classes=torch.as_tensor(codes[first:stop].astype(np.int64),device=device)
