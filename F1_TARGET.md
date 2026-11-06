@@ -172,3 +172,22 @@ tree-only/equal-graph-blend cost comparison, changing only the rich feature cach
 Reuse the same folds, purge, audio PCA and fixed tree settings. Select on training
 OOF, then score only the selection on unchanged main validation. Report against
 the existing 0.5754 OOF leader and 0.7200 main-score leader separately.
+
+## Experiment 15, fixed before fitting
+
+Test an explicit physical ownership expert instead of adding neural capacity.
+Fit one L2 logistic owner classifier (C=0.1, no intercept, fixed 5 Hz training
+grid, no class weights) on known live training frames only. Inputs are signed
+team-relative proximity, density, motion/spread, tag balance, and exponentially
+decayed previous/next automatic contact and reception observations (0.5/2/8 s).
+Future event context remains within each half and at most 30 seconds. Replace
+missing observations with zero evidence; fit RMS scales using that fold's live
+training frames only. Signed inputs and the zero intercept impose team symmetry.
+No absolute position, video time, previous predictions or reference-derived events.
+
+Keep the graph's dead posterior and boundary scores unchanged. Mix only its
+conditional H/A owner posterior with the physical expert, using fixed physical
+weights 0.5, 0.75 or 1.0. Compare the existing costs 1, 2, 4 and 8, plus unchanged
+graph/8 and graph/tree/2 controls. Same five windows and 60-second purge. Select
+pooled training OOF spellF1 before scoring only the winner on unchanged main
+validation. Log all 14 choices and acknowledge selection on reused windows.
