@@ -11,6 +11,17 @@ from learned_possession.features import FeatureCache
 
 
 class BoostedTests(unittest.TestCase):
+    def test_equal_ensemble_preserves_distributions_and_rejects_invalid_scores(self):
+        from boosted_possession.ensemble import average
+        scores=dict(a=(np.tile([.8,.1,.1],(8,1)),np.zeros(8)),
+                    b=(np.tile([.2,.4,.4],(8,1)),np.ones(8)))
+        p,q=average(scores,('a','b'))
+        np.testing.assert_allclose(p,np.tile([.5,.25,.25],(8,1)))
+        np.testing.assert_array_equal(q,np.ones(8)*.5)
+        with self.assertRaises(ValueError):average(scores,())
+        with self.assertRaises(ValueError):average(scores,('missing',))
+        with self.assertRaises(ValueError):average({'bad':(np.ones((8,3)),np.zeros(8))},('bad',))
+
     def test_context_does_not_cross_halves_and_team_map_is_involutive(self):
         names=('activity','home_speed_mean','away_speed_mean','contact_last_team','contact_age_s',
                'distance_margin','known_dead_from_metadata')
