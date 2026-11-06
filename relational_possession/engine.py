@@ -14,10 +14,10 @@ def tensors(graph,first,stop,half,device):
     return {key:torch.as_tensor(value,device=device) for key,value in graph.window(first,stop,half).items()}
 
 
-def train_seed(global_x,pair_x,graph,codes,selected,config,arm,seed,device):
+def train_seed(global_x,pair_x,graph,codes,selected,config,arm,seed,device,model_factory=RelationalNet):
     deterministic(seed)
     rng=np.random.default_rng(seed)
-    model=RelationalNet(global_x.shape[1],pair_x.shape[2],graph.nodes.shape[2],config,arm).to(device)
+    model=model_factory(global_x.shape[1],pair_x.shape[2],graph.nodes.shape[2],config,arm).to(device)
     boundary,usable=boundary_targets(codes,3)
     positive=float(boundary[usable].sum())
     negative=float(usable.sum())-positive
