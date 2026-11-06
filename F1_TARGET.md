@@ -110,3 +110,30 @@ control. Choose highest pooled OOF spellF1, breaking ties by listed order, save
 the decision, then evaluate only that selection on the unchanged main validation.
 Archive every OOF result, including failures. This is exploratory model selection
 on reused windows and cannot demonstrate independent full-match performance.
+
+### Experiment 11 outcome
+
+All six boosted fits completed. The equal tree/graph blend with switch cost 2
+improved training OOF spellF1 from 0.5123 to 0.5754, but its selected main score
+fell to 0.6133. Tree-only OOF scores ranged from 0.4308 to 0.4692. The new blend
+is the current training-OOF leader; the original graph retains the highest main
+score (0.7200). These disagreeing rankings show the instability of this small,
+reused validation set. Do not describe either as proven full-match improvement.
+
+## Experiment 12, fixed before fitting
+
+Test a longer temporal receptive field without increasing model capacity. Keep
+the original graph encoder, shared team head, loss, optimizer, 60 epochs and seeds.
+Run its temporal convolutions at the graph's existing 5 Hz observation cadence,
+then interpolate state and boundary logits onto 25 Hz for the original losses.
+The six dilation blocks now see about 25 seconds on each side instead of 5 seconds.
+Use the original fold-fitted preprocessing and original 15 graph features; no
+contact-history projection, memory or span losses. Keep the 60-second purge and
+extend both training context sides to cover the new receptive field.
+
+Fit five seed-0 whole-window folds and three final seeds, using the same window
+supervision. Compare costs 1, 2, 4 and 8 with the unchanged segment decoder and
+training-only durations. Include graph/fixed-8 and experiment-11 blend/fixed-2
+as controls. Select maximum pooled OOF spellF1, control-first ties, and record
+the decision before scoring only that selection on the original main validation.
+No new parameter grid, labels, output edits or validation-based early stopping.
