@@ -258,3 +258,25 @@ Include unchanged graph/8 and graph/tree/2 as controls. Select the best of these
 14 predeclared choices using pooled training-window OOF only, save the decision,
 then score only the selected variant on unchanged main validation. Use the same
 fold models, purge and references. Do not inspect main scores for other matrices.
+
+## Experiment 19, fixed before additional fold fitting
+
+Correct a model-selection mismatch: previous OOF predictions use one seed per
+fold, whereas main predictions average three seeds. Decoder calibration should
+use the same ensemble size as deployment. For the original graph architecture,
+reuse every saved fold seed-0 checkpoint and fit seeds 1 and 2 in each of the five
+folds (10 new fits), with unchanged preprocessing, configuration, masks and epochs.
+Do not refit the existing three-seed global model or change any of its weights.
+
+Average each fold's state and corrected boundary posteriors over seeds 0/1/2.
+Compare this matched three-seed graph ensemble and its equal mixture with the
+existing fold-specific trees, at costs 1, 2, 4 and 8. Choose the highest pooled
+OOF spellF1 among these eight matched-ensemble candidates, cost/order ties as
+listed. Archive the old seed-0 OOF controls as diagnostics, not as alternative
+estimates of the three-seed model. Record the selection before one main scoring.
+The global graph/trees score arrays and reference hashes must stay unchanged.
+
+This repairs the ensemble-size mismatch; it does not turn reused windows into an
+untouched benchmark. Report per-fold scores and the difference between old and
+matched OOF estimates beside the selected main score. No new state model grid,
+validation-based cost choice, early stopping, labels or output correction.
