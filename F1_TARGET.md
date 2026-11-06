@@ -137,3 +137,16 @@ training-only durations. Include graph/fixed-8 and experiment-11 blend/fixed-2
 as controls. Select maximum pooled OOF spellF1, control-first ties, and record
 the decision before scoring only that selection on the original main validation.
 No new parameter grid, labels, output edits or validation-based early stopping.
+
+## Experiment 13, fixed before combining scores
+
+Test complementary existing model errors without training any new parameters.
+Use the original learned-audio TCN's expanded-data fold scores (experiment 5/6),
+the original relational graph scores, and experiment-11 tree scores. All must
+share the same references, five held-out windows and training-only preprocessing.
+Compare an equal arithmetic graph/TCN mixture and an equal graph/tree/TCN mixture,
+each with the existing costs 1, 2, 4 and 8. Use the original graph-training duration
+fits and average boundary posteriors with the same weights as states. No learned
+ensemble weights or main-validation calibration. Include graph/8 and graph/tree/2
+as first-listed controls. Select pooled OOF spellF1 before one main evaluation.
+Archive all results and retain the original prediction files as immutable controls.
