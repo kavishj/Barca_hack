@@ -48,7 +48,7 @@ def candidates(probability, boundary, p):
     return out
 
 
-def decode(probability, boundary, fps, p=None, durations=None):
+def decode(probability, boundary, fps, p=None, durations=None, transition_costs=None):
     """Return H/A/D integer codes for one half from observation-derived scores.
 
     Each segment contributes summed log state probability / fps. Each internal
@@ -68,6 +68,11 @@ def decode(probability, boundary, fps, p=None, durations=None):
             or not np.allclose(probability.sum(axis=1), 1)
             or not np.isfinite(boundary).all() or ((boundary < 0) | (boundary > 1)).any()):
         raise ValueError("invalid state or boundary probabilities")
+    if transition_costs is not None:
+        transition_costs = np.asarray(transition_costs, dtype=float)
+        if (transition_costs.shape != (3, 3) or not np.isfinite(transition_costs).all()
+                or (transition_costs < 0).any() or np.any(np.diag(transition_costs) != 0)):
+            raise ValueError("transition costs must be a finite nonnegative 3x3 matrix with zero diagonal")
     edge = candidates(probability, boundary, p)
     prefix = np.vstack([np.zeros(3), np.cumsum(np.log(np.clip(probability, 1e-6, 1)), axis=0)]) / fps
     q = np.clip(boundary, 1e-4, 1 - 1e-4)
@@ -82,8 +87,12 @@ def decode(probability, boundary, fps, p=None, durations=None):
         for c in range(3):
             others = np.array([s for s in range(3) if s != c])
             prev = best[:j, others]
+            if transition_costs is not None:
+                prev = prev - transition_costs[others, c]
             src = np.argmax(prev, axis=1)
-            values = prev[np.arange(j), src] - p.switch_cost
+            values = prev[np.arange(j), src]
+            if transition_costs is None:
+                values = values - p.switch_cost
             values[1:] += boundary_score[starts[1:]]
             values[0] = 0.0  # no transition before the first frame of a half
             values += prefix[edge[j], c] - prefix[starts, c]
