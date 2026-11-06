@@ -241,3 +241,20 @@ purge remain unchanged. No target-match augmentation is added in this experiment
 Compare costs 1, 2, 4 and 8 against graph/8 and graph/tree/2 controls. Select pooled
 training OOF spellF1 before one unchanged main evaluation. External pretraining
 performance cannot be substituted for the requested target-match F1.
+
+## Experiment 18, fixed before typed-cost decoding
+
+The training audit identified very short live possessions, while generic adaptive
+switching over-fragmented play. Separate the cost of a direct H/A turnover from
+the cost of entering/leaving D. This changes no state emissions or neural weights.
+Use a symmetric off-diagonal transition matrix: H↔A cost in {1,2,4}; H/A↔D cost
+in {4,8}. Keep the original boundary penalty, candidate generation and weak
+training-fitted duration preferences. No hard minimum duration or transition reward.
+
+Apply the six matrices to two fixed score sources: the original graph, and the
+graph with physical-owner weight 0.75 (the best new expert weight on experiment-15
+OOF). Keep graph dead and boundary posteriors unchanged for the physical source.
+Include unchanged graph/8 and graph/tree/2 as controls. Select the best of these
+14 predeclared choices using pooled training-window OOF only, save the decision,
+then score only the selected variant on unchanged main validation. Use the same
+fold models, purge and references. Do not inspect main scores for other matrices.
