@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Barça hackathon — independent video review</title>
+<style>
+body{font:16px system-ui,sans-serif;background:#111820;color:#edf2f8;max-width:1200px;margin:24px auto;padding:0 20px}h1{font-size:26px}button,input,select{font:inherit;padding:8px;margin:4px;border-radius:5px}button{cursor:pointer;background:#263647;color:#fff;border:1px solid #68778a}button:disabled{opacity:.4;cursor:default}label{display:inline-block;margin:4px}video{display:block;width:100%;max-height:65vh;background:#000;margin-top:16px}small,.muted{color:#afbece}a{color:#92ccff}#message{padding:12px;background:#273747;min-height:24px}#frame{font-variant-numeric:tabular-nums;font-size:21px}#timeline{display:flex;height:22px;margin:12px 0;border:1px solid #8794a4}#timeline span{min-width:1px;cursor:pointer}.H{background:#2569b0}.A{background:#bd3449}.D{background:#697887}.X{background:#2e2637}#segments{max-height:220px;overflow:auto}#segments button{padding:4px 10px}details{background:#1d2936;padding:12px;margin:12px 0}summary{cursor:pointer}kbd{background:#354555;padding:1px 5px;border-radius:3px}input[type=range]{width:98%}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}textarea{width:97%;background:#1b2938;color:#fff;padding:8px;font:inherit}#status{font-weight:bold}#error{color:#ffb1b1}#reviewed{background:#155b49}
+</style>
+<h1>Independent possession labels</h1>
+<p>18 minutes for training · 6 for validation · 6 reserved for the final comparison. No model predictions are displayed.</p>
+<details open><summary>Read before labelling</summary>
+<p>Choose the original <b>BAR-ATH_tactical.mp4</b>. It stays on your computer. Use desktop Chrome or Edge for decoded-frame reporting. Keep sound on for foul whistles.</p>
+<p><b>H</b> = Barcelona (blue/red); <b>A</b> = Athletic (white); <b>D</b> = dead ball; <b>X</b> = unclear. A loose ball stays with the last team until the opponent controls it. D starts at the whistle or when the ball crosses a line; live play starts at the restart touch. Check the following play before deciding whether a goalkeeper catch was followed by a free kick.</p>
+<p>First select the public-calibration window. Label it blind, close it, then reveal the supplied public boundaries and check differences. The public labels contain subtle foul/restart conventions; see <code>tools/LABELLING.md</code>. Calibration labels are excluded from all three new splits. Do not copy model predictions into these windows.</p>
+<p>Watch a complete window, mark rough changes, then refine every change frame by frame. Put the current label at the window's first frame. Uncertain spans need an X start and a known-label start when certainty returns. The end is closed with X. Window edges censor partial possessions; keep these fixed for a reproducible split.</p>
+<p><kbd>Space</kbd> play/pause · <kbd>←</kbd>/<kbd>→</kbd> one frame (Shift: 5, Ctrl: 25) · <kbd>H</kbd>/<kbd>A</kbd>/<kbd>D</kbd>/<kbd>X</kbd> start a segment · <kbd>U</kbd> undo. Click a boundary to seek there. Delete removes the boundary at the displayed frame.</p>
+<p>Download a JSON backup after each window. Mark reviewed only after checking all changes; this is your review record. Test labels must stay out of model fitting and model selection.</p>
+</details>
+<div class="row"><label>Your name <input id="labeller" placeholder="Reviewer name"></label><label><input id="calibrated" type="checkbox">I have calibrated against the public labels</label></div>
+<div class="row"><label>Original video <input id="file" type="file" accept="video/mp4"></label><label>Restore review JSON <input id="restore" type="file" accept=".json"></label><button id="download">Download review JSON</button></div>
+<div class="row"><label>Window <select id="window"><option value="-1">Start here · 2½-minute public calibration</option></select></label><button id="begin">Start of labelled window</button><button id="context">Watch preceding context</button><button id="close">Close at stop with X</button><button id="compare">Reveal public calibration boundaries</button></div>
+<div id="comparison"></div>
+<div id="message">Choose your original video. No labels have been supplied.</div>
+<video id="video" controls preload="metadata"></video>
+<div class="row"><span id="frame">No decoded frame</span><span id="status"></span><span id="error"></span></div>
+<input id="seek" type="range" step="1" aria-label="Video frame">
+<div class="row"><button id="back">−1 frame</button><button id="forward">+1 frame</button><label>Go to frame <input id="goto" type="number" min="0" max="199318"></label><button id="go">Go</button><label>Speed <select id="speed"><option>.25</option><option>.5</option><option selected>1</option><option>1.5</option><option>2</option></select></label></div>
+<div class="row"><button data-label="H" class="H">H · Barcelona</button><button data-label="A" class="A">A · Athletic</button><button data-label="D" class="D">D · Dead</button><button data-label="X" class="X">X · Uncertain</button><button id="remove">Delete this boundary</button><button id="undo">Undo</button></div>
+<div id="timeline"></div><div id="segments"></div>
+<label>Uncertainties / review notes</label><textarea id="notes" rows="2"></textarea>
+<div class="row"><button id="reviewed">Confirm second-pass review of this window</button><button id="draft">Return window to draft</button><span id="progress"></span></div>
+<script>
+'use strict';
+const PACK=/*__PACK_DATA__*/null;
+const plan=PACK.plan, FPS=plan.fps, N=plan.n_frames;
+const $=id=>document.getElementById(id), video=$('video');
+const storageKey='barca-independent-review:'+PACK.session.plan_sha256;
+let state=structuredClone(PACK.session), wi=-1, shown=null, wanted=null, ready=false, validVideo=false, objectURL=null, undo=[];
+try { const saved=localStorage.getItem(storageKey); if(saved) {const value=JSON.parse(saved);checkState(value);state=value;} } catch(e) {$('message').textContent='Autosave unavailable or invalid. Download JSON backups regularly.';}
+function current(){return wi<0?PACK.calibration:plan.windows[wi];}
+function entry(){return wi<0?state.calibration_review:state.windows[current().id];}
+function checkState(s){
+ if(s.schema!==1||s.plan_sha256!==PACK.session.plan_sha256||s.n_frames!==N||s.fps!==FPS||s.provenance!==PACK.session.provenance||typeof s.labeller!=='string'||typeof s.calibration_confirmed!=='boolean')throw Error('Review file does not match this plan.');
+ if(!s.windows||Object.keys(s.windows).sort().join('|')!==plan.windows.map(w=>w.id).sort().join('|'))throw Error('Review windows do not match.');
+ for(const w of [...plan.windows,PACK.calibration]){const e=w.id===PACK.calibration.id?s.calibration_review:s.windows[w.id];if(!e||!Array.isArray(e.boundaries)||!['draft','reviewed'].includes(e.status)||typeof e.notes!=='string')throw Error('Malformed review record.');let last=w.start_frame-1;for(const p of e.boundaries){if(!Array.isArray(p)||p.length!==2||!Number.isInteger(p[0])||p[0]<=last||p[0]<w.start_frame||p[0]>w.stop_frame||!['H','A','D','X'].includes(p[1]))throw Error('Malformed boundaries.');last=p[0];}}
+}
+function message(t){$('message').textContent=t;}
+function save(){state.labeller=$('labeller').value.trim();state.calibration_confirmed=$('calibrated').checked;try{localStorage.setItem(storageKey,JSON.stringify(state));}catch(e){message('Autosave failed. Download a JSON backup now.');}render();}
+function modified(){entry().status='draft';entry().reviewer='';entry().reviewed_at=null;save();}
+function checkpoint(){undo.push({id:current().id,data:structuredClone(entry())});if(undo.length>200)undo.shift();}
+function frameReady(){return validVideo&&ready&&Number.isInteger(shown)&&!video.seeking;}
+function updateFrame(){
+ $('frame').textContent=shown===null?'No decoded frame':`Frame ${shown} · video ${(shown/FPS).toFixed(2)} s`;
+ document.querySelectorAll('[data-label]').forEach(b=>b.disabled=!frameReady()||shown<current().start_frame||shown>=current().stop_frame);
+ if(shown!==null)$('seek').value=shown;
+}
+function seek(n){
+ if(!validVideo){message('Choose the original video first.');return;}
+ if(!Number.isInteger(n)||n<current().context_start||n>=current().context_stop){message('Choose a frame inside this window and its context.');return;}
+ video.pause();wanted=n;ready=shown===n&&!video.seeking;
+ if(!ready)video.currentTime=(n+.25)/FPS;
+ updateFrame();
+}
+function step(delta){seek((shown===null?current().start_frame:shown)+delta);}
+function mark(label){
+ if(!frameReady()||shown<current().start_frame||shown>=current().stop_frame){message('Wait for an exact decoded frame inside the labelled window.');return;}
+ video.pause();checkpoint();const points=entry().boundaries.filter(p=>p[0]!==shown);points.push([shown,label]);entry().boundaries=points.sort((a,b)=>a[0]-b[0]);modified();message(`${label} starts at frame ${shown}. Refine each boundary before marking this window reviewed.`);
+}
+function complete(w,e){const p=e.boundaries;return p.length>=2&&p[0][0]===w.start_frame&&p.at(-1)[0]===w.stop_frame&&p.at(-1)[1]==='X'&&p.slice(0,-1).some(p=>p[1]!=='X');}
+function render(){
+ const w=current(),e=entry();$('status').textContent=`${w.split} · ${e.status}`;
+ $('notes').value=e.notes||'';const timeline=$('timeline'),segments=$('segments');timeline.replaceChildren();segments.replaceChildren();
+ const points=e.boundaries;let a=w.start_frame,lab='X';
+ function band(stop){if(stop<=a)return;const node=document.createElement('span');node.className=lab;node.style.flexGrow=stop-a;node.title=`${a}–${stop-1}: ${lab}`;const start=a;node.onclick=()=>seek(start);timeline.append(node);a=stop;}
+ for(const [f,label] of points){band(f);lab=label;const b=document.createElement('button');b.textContent=`${f}: ${label}`;b.onclick=()=>seek(Math.min(f,w.context_stop-1));segments.append(b);}band(w.stop_frame);
+ $('progress').textContent=`${Object.values(state.windows).filter(e=>e.status==='reviewed').length}/${plan.windows.length} windows reviewed`;
+ $('reviewed').disabled=!complete(w,e)||!state.labeller||(wi>=0&&!state.calibration_confirmed);
+ $('compare').disabled=wi>=0||!complete(w,e);
+ $('comparison').hidden=wi>=0;
+}
+function chooseWindow(){wi=Number($('window').value);const w=current();$('seek').min=w.context_start;$('seek').max=w.context_stop-1;$('goto').value=w.start_frame;render();seek(w.start_frame);}
+for(let i=0;i<plan.windows.length;i++){const w=plan.windows[i],o=document.createElement('option');o.value=i;o.textContent=`${w.id} · frames ${w.start_frame}–${w.stop_frame-1}`;$('window').append(o);}
+$('labeller').value=state.labeller;$('calibrated').checked=state.calibration_confirmed;
+$('window').onchange=chooseWindow;$('labeller').onchange=save;$('calibrated').onchange=save;
+if('requestVideoFrameCallback' in video){const callback=(now,meta)=>{const exact=meta.mediaTime*FPS;shown=Math.round(exact);ready=Math.abs(exact-shown)<.02&&(wanted===null||shown===wanted);if(ready)wanted=null;else if(Math.abs(exact-shown)>=.02)$('error').textContent='Decoded frame is off the expected 25 fps grid.';updateFrame();video.requestVideoFrameCallback(callback);};video.requestVideoFrameCallback(callback);}else{$('error').textContent='This browser cannot report decoded frames. Use desktop Chrome/Edge or tools/label_tool.py.';}
+video.onseeked=()=>{if(wanted!==null&&shown===wanted){wanted=null;ready=true;}updateFrame();};
+video.onplay=()=>{wanted=null;};video.ontimeupdate=()=>{if(video.currentTime>=current().context_stop/FPS){video.pause();seek(current().context_stop-1);}};
+$('file').onchange=()=>{const f=$('file').files[0];if(!f)return;video.pause();validVideo=false;ready=false;shown=null;if(objectURL)URL.revokeObjectURL(objectURL);objectURL=URL.createObjectURL(f);video.src=objectURL;message('Checking original video duration…');};
+video.onloadedmetadata=()=>{if(Math.abs(video.duration-N/FPS)>.08){message(`Wrong video duration (${video.duration.toFixed(2)} s). Choose the original full match, not a clip.`);return;}validVideo=true;message('Video loaded locally. Labels are drafts until you complete the second-pass review.');seek(current().start_frame);};
+$('begin').onclick=()=>seek(current().start_frame);$('context').onclick=()=>seek(current().context_start);$('back').onclick=()=>step(-1);$('forward').onclick=()=>step(1);$('go').onclick=()=>seek(Number($('goto').value));$('seek').onchange=()=>seek(Number($('seek').value));$('speed').onchange=()=>{video.playbackRate=Number($('speed').value);};
+document.querySelectorAll('[data-label]').forEach(b=>b.onclick=()=>mark(b.dataset.label));
+$('close').onclick=()=>{checkpoint();entry().boundaries=entry().boundaries.filter(p=>p[0]!==current().stop_frame);entry().boundaries.push([current().stop_frame,'X']);modified();seek(current().stop_frame);};
+$('remove').onclick=()=>{if(!frameReady())return;checkpoint();entry().boundaries=entry().boundaries.filter(p=>p[0]!==shown);modified();};
+$('undo').onclick=()=>{const prior=undo.pop();if(!prior)return;if(prior.id===PACK.calibration.id)state.calibration_review=prior.data;else state.windows[prior.id]=prior.data;save();};
+$('notes').onchange=()=>{entry().notes=$('notes').value;save();};
+$('reviewed').onclick=()=>{save();if(!complete(current(),entry())||!state.labeller||(wi>=0&&!state.calibration_confirmed))return;entry().status='reviewed';entry().reviewer=state.labeller;entry().reviewed_at=new Date().toISOString();save();message('Window recorded as reviewed. Download a JSON backup.');};
+$('compare').onclick=()=>{
+ if(wi>=0||!complete(current(),entry()))return;const c=$('comparison');c.replaceChildren();
+ let same=0,known=0,pi=0,ti=0;const p=entry().boundaries,t=PACK.calibration_truth;
+ for(let f=current().start_frame;f<current().stop_frame;f++){while(p[pi+1]&&p[pi+1][0]<=f)pi++;while(t[ti+1]&&t[ti+1][0]<=f)ti++;if(p[pi][1]!=='X'){known++;same+=Number(p[pi][1]===t[ti][1]);}}
+ const summary=document.createElement('p');summary.textContent=`Calibration agreement on known frames: ${(100*same/Math.max(1,known)).toFixed(1)}%; labelled coverage ${(100*known/(current().stop_frame-current().start_frame)).toFixed(1)}%. This is a calibration aid, not a new validation score. Public starts:`;c.append(summary);
+ for(const [f,label] of t){const b=document.createElement('button');b.textContent=`${f}: ${label}`;b.onclick=()=>seek(f);c.append(b);}message('Inspect each public boundary against your labels. Confirm calibration only after resolving the conventions.');
+};
+$('draft').onclick=()=>{checkpoint();modified();};
+$('download').onclick=()=>{save();const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)+'\n'],{type:'application/json'}));a.href=url;a.download='barca-review-'+(state.labeller.replace(/[^\w-]/g,'_')||'draft')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);};
+$('restore').onchange=async()=>{try{const f=$('restore').files[0];if(!f)return;const s=JSON.parse(await f.text());checkState(s);state=s;undo=[];$('labeller').value=s.labeller;$('calibrated').checked=s.calibration_confirmed;save();message('Review restored.');}catch(e){message(e.message);}};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;const key=e.key.toUpperCase();if(key===' '){e.preventDefault();if(validVideo)(video.paused?video.play():video.pause());}else if(key==='ARROWLEFT'||key==='ARROWRIGHT'){e.preventDefault();step((key==='ARROWLEFT'?-1:1)*(e.ctrlKey?25:e.shiftKey?5:1));}else if('HADX'.includes(key)&&key.length===1){e.preventDefault();mark(key);}else if(key==='U'){e.preventDefault();$('undo').click();}else if(key==='DELETE'||key==='BACKSPACE'){e.preventDefault();$('remove').click();}});
+const w=current();$('seek').min=w.context_start;$('seek').max=w.context_stop-1;render();updateFrame();
+</script>
+</html>

@@ -1,0 +1,10 @@
+# First supervised experiment; kept separate from the byte-reproducible v6 stack.
+# CPU preparation/training/decoding. The later TCN experiment will use Kaggle's GPU.
+numpy==2.3.5
+pandas==2.2.3
+scipy==1.17.0
+scikit-learn==1.8.0
+joblib==1.5.3
+threadpoolctl==3.6.0
+# Needed only to prepare raw-match features, not to train on an existing cache.
+av==18.1.0

@@ -1,0 +1,8 @@
+# CUDA PyTorch and matching torchvision come from the Kaggle GPU image.
+# Install these with --no-deps after requirements-learning.txt so PyTorch is not replaced.
+transformers==4.57.6
+accelerate==1.15.0
+bitsandbytes==0.50.2
+huggingface-hub==0.36.2
+tokenizers==0.22.2
+safetensors==0.7.0

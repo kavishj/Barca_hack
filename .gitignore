@@ -78,3 +78,10 @@ env/
 *.png
 *.jpg
 *.jpeg
+
+# Learned checkpoints, feature caches and licensed-data-derived artifacts stay private.
+*.pt
+*.pth
+*.joblib
+*.npz
+*.npy

@@ -1,0 +1,3 @@
+# Reuse the pinned feature/scoring stack. PyTorch >=2.4 is also required.
+# On Kaggle use its preinstalled CUDA PyTorch; do not replace it with a CPU wheel.
+-r requirements-learning.txt
