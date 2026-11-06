@@ -209,3 +209,35 @@ initialization are preserved. No dropout, loss, epoch or architecture changes.
 Compare costs 1, 2, 4 and 8 against unchanged graph/8 and graph/tree/2 controls;
 choose pooled OOF spellF1 before one main evaluation. No validation-derived regions,
 event timings, transforms or label changes.
+
+## Experiment 17, fixed before external pretraining
+
+Use the publicly accessible Metrica Sports Sample Games 1 and 2, pinned to
+`metrica-sports/sample-data@e706dd506b360d69d9d123d5b8026e7294b13996`.
+These are separate anonymized fixtures with 145,006 and 141,156 tracking frames,
+not another possession answer key for the target match. The rules explicitly
+allow public external data. Acknowledge Metrica Sports and retain the upstream
+README notice; do not redistribute their raw assets in this repository.
+
+Pretrain only the existing two-layer, width-32 spatial graph encoder and a shared
+linear H/A owner head on closed successful PASS intervals from those event CSVs.
+Exclude offside passes, malformed intervals and conflicting opposite-team labels;
+use half-open intervals and the source's published synchronized 25 Hz frame IDs.
+Do not infer dead labels or forward-fill ownership between events. Sample the
+existing graph cadence (5 Hz). Preserve missing ball/player observations, pack
+teams consistently into padded 47-token graphs, and identify goalkeeper slots by
+their mean distance from midfield, independently of possession labels.
+
+Pretraining uses seed 0, 20 epochs, batch 128, AdamW LR 0.001, weight decay 0.001,
+cosine schedule, natural CE, no early stopping or target-match labels. Augment
+each graph with random x/y reflections, 10% independent player dropout and 20%
+ball dropout, consistently masking coordinates and ball-relative observations.
+No external hyperparameter search or target-validation checkpoint selection.
+
+Freeze this pretrained spatial encoder during the original target-match 60-epoch
+graph+TCN training; keep it in eval mode. All other initialization, preprocessing,
+losses, optimizer settings, five seed-0 folds, three final seeds and 60-second
+purge remain unchanged. No target-match augmentation is added in this experiment.
+Compare costs 1, 2, 4 and 8 against graph/8 and graph/tree/2 controls. Select pooled
+training OOF spellF1 before one unchanged main evaluation. External pretraining
+performance cannot be substituted for the requested target-match F1.
