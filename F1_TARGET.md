@@ -191,3 +191,21 @@ weights 0.5, 0.75 or 1.0. Compare the existing costs 1, 2, 4 and 8, plus unchang
 graph/8 and graph/tree/2 controls. Same five windows and 60-second purge. Select
 pooled training OOF spellF1 before scoring only the winner on unchanged main
 validation. Log all 14 choices and acknowledge selection on reused windows.
+
+## Experiment 16, fixed before fitting
+
+Test label-preserving geometric augmentation to reduce memorization of pitch
+regions. Train the original 25 Hz graph + TCN with the original fixed configuration,
+five seed-0 folds and three final seeds. For each training window, independently
+sample reflections across the pitch's x/y midlines. Reflect graph positions,
+velocities, ball-relative vectors and relative velocities consistently. For a
+y-reflection, also reflect raw ball-y and ball-vy observations through the saved
+fold normalizer, preserving missingness. X-reflection reverses the attack direction
+too, so the existing attack-relative scalar features remain unchanged. Distances,
+team identity, supervision and labels are invariant. No augmentation at inference.
+
+Keep a separate augmentation RNG so the original window shuffle sequence and model
+initialization are preserved. No dropout, loss, epoch or architecture changes.
+Compare costs 1, 2, 4 and 8 against unchanged graph/8 and graph/tree/2 controls;
+choose pooled OOF spellF1 before one main evaluation. No validation-derived regions,
+event timings, transforms or label changes.
