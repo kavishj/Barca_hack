@@ -1,0 +1,45 @@
+{
+  "verified": true,
+  "selected": "control",
+  "control_policy": "clap_external",
+  "oof": {
+    "control": {
+      "spell_f1_mean": 0.64,
+      "macro_f1": 0.843823449683525,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "early_graph": {
+      "spell_f1_mean": 0.5132075471698113,
+      "macro_f1": 0.8180557172962845,
+      "n_gt_spells": 33,
+      "n_pred_spells": 20
+    },
+    "early_external": {
+      "spell_f1_mean": 0.6032786885245902,
+      "macro_f1": 0.8308794922826723,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.55,
+    "macro_f1": 0.6308752202641541,
+    "n_gt_spells": 9,
+    "n_pred_spells": 7
+  },
+  "fold_scores_verified": 15,
+  "pooled_scores_verified": 3,
+  "all_six_training_masks_and_source_preprocessors_match_exactly": true,
+  "all_18_checkpoints_have_20_epochs_and_verified_hashes": true,
+  "only_config_change_is_training_epochs": true,
+  "max_first_epoch_loss_difference": 0.0,
+  "source_control_predictions_reproduced": true,
+  "selected_new_model_regenerated_from_weights_on_cpu": false,
+  "selected_predictions_verified_byte_identically": true,
+  "reference_files_unchanged": true,
+  "source_input_hashes_verified": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Repeated target-window model selection and reused nine-possession validation; no independent full-match score"
+}
