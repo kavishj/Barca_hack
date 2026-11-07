@@ -652,3 +652,31 @@ the frozen control. Use all five whole-window OOF predictions with unchanged
 score only the winner on reused main. If control wins, retain its existing main
 score and byte-identical CSV. This is a fixed factorization comparison; reused
 windows remain exploratory and do not prove independent full-match performance.
+
+## Experiment 32, fixed pretrained AudioSet transformer replacement
+
+The factorized tabular dead-ball expert did not beat the 0.6400 OOF control.
+Test a second independent acoustic encoder: frozen
+`MIT/ast-finetuned-audioset-10-10-0.4593`, revision
+`f826b80d28226b62986cc218e5cec390b1096902` (BSD-3-Clause, 86,594,063 parameters).
+Use the pretrained Audio Spectrogram Transformer's 768-dimensional pooled output
+and sigmoid AudioSet `Whistle`/`Whistling` classifier scores. No audio fine-tuning,
+prompt tuning, acoustic-event labels or corrected possession keys.
+
+Use original audio PTS relative to video PTS at the checkpoint's native 16 kHz.
+Keep the same two-second clips, 0.5-second centers, endpoint coverage, half padding
+and availability policy as PANNs/CLAP. Use the checkpoint's feature extractor and
+its default padding to 1,024 filterbank frames. No longer-context or preprocessing
+grid. Record all model/config hashes, the 768-feature schema and exact class IDs.
+
+Keep the original graph model, 60 epochs, seeds 0/1/2, loss, decoder cost 8,
+duration priors and raw tracking/heuristic whistle inputs. Fit PCA-32 and scaling
+only within each fold's remaining known training frames after the same 60-second
+purge. Train all five matched three-seed folds and the final three seeds (18 fits).
+The control is experiment-31's unchanged OOF-selected policy. Compare it with
+`ast_graph` and `ast_external`, following experiment 28's graph-only and
+observed-ball fixed external-owner definitions and boundary-max policy.
+Save the pooled-OOF spellF1 decision before scoring only the winner on reused main.
+If control wins, preserve its output and main result. Keep all references,
+coverage and kickoff constraints. A stronger pretrained audio benchmark or frame
+F1 is not achievement of target-match spellF1 or independent generalization.
