@@ -14,6 +14,8 @@ All experiments keep the same 21,787 known training frames, five whole-window ho
 | 14: Separate automatic tag types | blend__4 | 0.5091 | graph__8 | 0.7200 |
 | 15: Physical ownership expert | 0.75__4 | 0.5571 | blend__2 | 0.6133 |
 | 16: Pitch-reflection augmentation | reflected__4 | 0.5079 | blend__2 | 0.6133 |
+| 17: Frozen external-pass spatial encoder | external__4 | 0.4968 | blend__2 | 0.6133 |
+| 18: Separate turnover/stoppage costs | physical__2_4 | 0.5571 | blend__2_2 | 0.6133 |
 
 The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The graph/tree blend is the current OOF leader at **0.5754**, but its main spellF1 is **0.6133**. These rankings disagree; neither establishes independent full-match improvement. The 0.80 ranking target has not been reached.
 
