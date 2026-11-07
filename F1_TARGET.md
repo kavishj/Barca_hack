@@ -413,3 +413,40 @@ normalized inputs to +/-8, and retain unscaled frozen point logits for the
 residual head. Fixed renewed ball-mask blocks have uniform lengths 5..100 coarse
 steps and geometric unmasked gaps averaging 210 steps. Loss masks respect the
 assigned known-live run, excluding D/X and half edges from boundary supervision.
+
+## Experiment 24, dead-ball transfer hypothesis fixed before reading Game-3 metrics
+
+The remaining target OOF confusion includes 1,657 live frames predicted D and
+1,673 dead frames predicted live in experiment 20. Test whether weak external
+stoppage supervision helps, independently of experiment 23's owner-only gate.
+Declare this second external hypothesis before either new Game-3 result is read.
+Game 3 therefore checks two predeclared hypotheses; report that multiplicity and
+do not treat its results as an untouched final test after these comparisons.
+
+Use exactly the same pinned full-control caches and frozen spatial/probe features.
+Train only on Games 1/2, with known H/A/D supervision and X censored. Keep the
+shared temporal backbone, point-logit owner residual, input normalization,
+missing-ball augmentation, seed, 60 fixed epochs, batches, cores, optimization
+and half resets from experiment 23. Add an invariant dead/live log-odds head over
+the mean and absolute difference of the two temporal team representations. Its
+weights start at zero, with the training dead/live prior as bias. Combine it with
+conditional H/A logits by factorization, preserving owner team symmetry. Train
+three-state CE plus 0.25 boundary BCE with radius-1 targets for any known state
+change, positive weight capped at 20; X and half edges never create transitions.
+
+Use a matched non-temporal external baseline: frozen instantaneous H/A probe and
+a C=0.1, unweighted logistic dead/live classifier fitted on Games 1/2 only. Its
+invariant inputs are the mean and absolute difference of the 32-dimensional team
+embeddings, absolute point-logit difference, ball visibility and graph confidence
+(67 dimensions). Fit standardization on known training frames, clip to +/-8,
+use an intercept, max_iter=2000, tol=1e-8, seed 0. Neither baseline nor temporal
+model sees target observations or labels while fitting. Natural class mass is
+preserved; no label balancing or manually derived missing-ball rule.
+
+After both fixed fits, interpolate three-state probabilities to the original
+Game-3 frame clock and use raw H/A/D argmax. Compare macro frame F1 over H/A/D
+and the official spellF1 on its known weak external spans. Require neither to
+decrease and at least one to improve before this branch's target OOF expansion.
+Report these as weak external metrics, never target-match achievement. No
+checkpoint, threshold or hyperparameter selection on Game 3. Preregister any
+subsequent target blend comparison before reading new target-window scores.
