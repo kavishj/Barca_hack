@@ -627,3 +627,28 @@ spellF1 decision before main scoring, and score only the winner on reused main
 validation. If control wins, copy its verified output without a new alternative
 main score. Preserve references, purge, graded coverage and all failed results.
 This is a fixed regularization comparison, not independent validation of 0.80.
+
+## Experiment 31, fixed factorized tabular dead-ball expert
+
+The shorter models scored 0.513208/0.603279 OOF spellF1 and retained the 0.6400
+control. The historical trees had stronger training-OOF alive/dead F1 (0.9060 at
+cost 8) than the fixed graph/external candidate (0.8842), but more H/A confusion.
+Test the tabular dead-ball probabilities separately from their ownership head.
+No new fitting, manual labels, corrected outputs or main-dependent coefficients.
+
+Use the verified experiment-29 selected candidate as `control`. Add three fixed
+policies using the unchanged fold-fitted experiment-11 trees: `trees_dead` uses
+their P(D), `trees_graph_mean` averages tree and original graph P(D) equally, and
+`trees_audio_mean` averages tree, original graph and CLAP graph P(D) equally.
+All retain experiment-20 conditional H/A ownership everywhere, including original
+graph ownership when the raw ball is missing. Thus no tabular ownership is used.
+Use the corresponding tree, equal-mean tree/graph or three-way boundary score,
+respectively, maximized with the original observed-ball external owner variation.
+Cost stays 8, duration priors stay original, and supplied kickoff D facts apply.
+
+Verify all model-source and reference hashes, matched graph fold identities and
+the frozen control. Use all five whole-window OOF predictions with unchanged
+60-second purge, save the pooled-OOF spellF1 decision before main scoring, and
+score only the winner on reused main. If control wins, retain its existing main
+score and byte-identical CSV. This is a fixed factorization comparison; reused
+windows remain exploratory and do not prove independent full-match performance.
