@@ -117,7 +117,8 @@ def block_context(values,start,core,radius,first,stop):
 
 def infer(model,x,point,half_ids,mean,scale,device):
     x=np.clip((x-mean)/scale,-8,8).astype(np.float32)
-    logits=np.zeros_like(point);boundary=np.zeros(len(x),np.float32);model.eval()
+    logits=np.zeros((len(point),getattr(model,'states',2)),np.float32)
+    boundary=np.zeros(len(x),np.float32);model.eval()
     with torch.inference_mode():
         for half in np.unique(half_ids):
             ids=np.flatnonzero(half_ids==half);first,stop=int(ids[0]),int(ids[-1])+1
