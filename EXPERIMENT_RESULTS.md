@@ -16,11 +16,12 @@ All experiments keep the same 21,787 known training frames, five whole-window ho
 | 16: Pitch-reflection augmentation | reflected__4 | 0.5079 | blend__2 | 0.6133 |
 | 17: Frozen external-pass spatial encoder | external__4 | 0.4968 | blend__2 | 0.6133 |
 | 18: Separate turnover/stoppage costs | physical__2_4 | 0.5571 | blend__2_2 | 0.6133 |
+| 19: Matched three-seed OOF calibration | blend__1 | 0.5133 | blend__1 | 0.6133 |
 
-The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The graph/tree blend is the current OOF leader at **0.5754**, but its main spellF1 is **0.6133**. These rankings disagree; neither establishes independent full-match improvement. The 0.80 ranking target has not been reached.
+The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The historical graph/tree blend reached **0.5754** using one-seed fold estimates and **0.6133** on main. Matching the fold ensemble to the three deployment seeds lowered the best OOF estimate to **0.5133**, with unchanged main spellF1 **0.6133**. The one-seed blend's frame macro F1 was **0.8198**, which is not the ranking metric. These rankings disagree; neither establishes independent full-match improvement. The 0.80 ranking target has not been reached.
 
 Each new study records its protocol before fitting, saves its OOF decision before main scoring, and scores only that selected variant on main validation. All listed results were independently rescored using the unchanged official evaluator. Saved selected outputs regenerate byte-identically. New neural checkpoints, tree-model hashes, source/input hashes and fold preprocessing were verified; graded H/A/D coverage and supplied pre-kickoff D constraints hold.
 
 The same training and validation windows were examined in earlier development. OOF scores select models/decoders and carry selection bias; the main validation is also reused. Do not treat these numbers as an untouched test or a guarantee against overfitting. No private full-match F1 is available.
 
-Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run18`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
+Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run20`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
