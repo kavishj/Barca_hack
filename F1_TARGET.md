@@ -450,3 +450,29 @@ decrease and at least one to improve before this branch's target OOF expansion.
 Report these as weak external metrics, never target-match achievement. No
 checkpoint, threshold or hyperparameter selection on Game 3. Preregister any
 subsequent target blend comparison before reading new target-window scores.
+
+## Experiment 25, fixed after experiment 23's external gate and before target scores
+
+The fixed owner-only external model improved conditional live-owner macro F1
+from 0.916737 to 0.945819 and typed turnover F1 from 0.254902 to 0.399317.
+This passes experiment 23's predeclared external gate. Freeze its final weights,
+normalization and encoder/probe; do not fit them on any target annotations.
+
+Compare four fixed target policies: the experiment-20 fixed decoder, the
+experiment-21 typed-gated decoder, and two new owner-only replacements. The new
+variants replace the conditional H/A owner with the external temporal output,
+either only when the raw target ball is observed (`temporal_observed`) or across
+the graded timeline (`temporal_all`). Leave graph P(D) unchanged, with original
+graph ownership retained wherever the variant is unavailable. Keep the same
+switch cost 8, durations and candidate/boundary scores as experiment 20: maximum
+of graph boundary and original instantaneous observed-ball owner variation. The
+new auxiliary temporal boundary head is not used in this first owner ablation.
+No blend grid, threshold tuning or decoder refit. Keep supplied kickoff D facts.
+
+Use matched three-seed graph OOF scores, the same five whole-window folds and
+60-second purge. Verify the two controls against saved CSVs. Select pooled OOF
+spellF1 with controls first on ties; write the decision before main scoring.
+Evaluate only that selected policy on unchanged, reused main validation. Record
+all variants and failures, complete graded coverage and regeneration checks.
+The public external check and reused target windows do not establish independent
+full-match generalization; the target remains official target-match spellF1 0.80.
