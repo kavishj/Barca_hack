@@ -300,7 +300,12 @@ when both graph samples observe the ball, centred between those samples with the
 existing +/-3-frame target-band radius. Mask it at missing-ball frames and take
 the maximum with the original graph boundary posterior. No transition rewards.
 
-Compare those three weights with costs 1, 2, 4 and 8, plus unchanged graph/8 and
-graph/tree/2 controls. Same five fold models and training-only durations; select
-pooled OOF spellF1 before one main scoring. External pretraining/probe training
-scores do not count toward the requested target-match F1. Archive every variant.
+Use experiment 19's matched three-seed fold graph posteriors and the unchanged
+three-seed global graph; keep the existing tree caches. Compare those three
+weights with costs 1, 2, 4 and 8, plus graph/8 and the OOF-selected experiment-19
+variant as controls (deduplicate if they coincide). That control identity comes
+only from experiment 19's decision file, without reading its main score. Keep
+training-only durations; select pooled OOF spellF1 before one main scoring.
+External pretraining/probe training scores do not count toward the requested
+target-match F1. Archive every variant. This ensemble-size clarification is
+recorded before probe fitting or access to experiment 19's results.
