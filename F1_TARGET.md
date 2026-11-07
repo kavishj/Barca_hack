@@ -600,3 +600,30 @@ reference hashes remain unchanged. Verify all three controls, select pooled OOF
 spellF1 with controls first on ties, save the decision and score only the winner
 on reused main. Keep all failures and complete graded coverage. This repeated
 development selection still cannot prove independent full-match generalization.
+
+## Experiment 30, fixed shorter training against the frozen best OOF control
+
+Experiment 29 did not improve spellF1: dead-only replacement tied 0.6400 and
+equal-mean variants scored 0.6133/0.6200, leaving the CLAP control selected at
+0.5500 main. The 60-epoch fits reached training losses around 0.04–0.08, so test a
+smaller fixed training budget before further expanding models. Do not select an
+epoch from the reused main window or add an early-stopping sweep.
+
+Train the exact experiment-28 graph architecture with the same fixed CLAP cache,
+loss, initialization seeds 0/1/2, dropout, weight decay, batches and labels, but
+use 20 epochs and a cosine schedule with T_max=20. Reuse each corresponding
+experiment-28 fold's preprocessing verbatim, verifying its training mask and all
+scaler hashes, so the audio representation and normalization cannot change.
+Keep duration priors fixed. No neural layer freezing, new augmentation or other
+hyperparameter change. Fit all five matched three-seed folds and the three-seed
+global model (18 fits), without intermediate-checkpoint selection.
+
+Compare the unchanged experiment-29 OOF-selected policy as `control` with
+`early_graph` and `early_external`. The new policies follow the experiment-28
+graph-only and observed-ball external-owner definitions, respectively, at cost 8
+and maximum of their own boundary with the original external owner variation.
+Retain supplied kickoff D facts. Check the control CSVs, save the pooled-OOF
+spellF1 decision before main scoring, and score only the winner on reused main
+validation. If control wins, copy its verified output without a new alternative
+main score. Preserve references, purge, graded coverage and all failed results.
+This is a fixed regularization comparison, not independent validation of 0.80.
