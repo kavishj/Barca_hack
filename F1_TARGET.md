@@ -501,3 +501,37 @@ pooled OOF spellF1 with controls first on ties and write the decision before
 scoring only the selected policy on reused main validation. Keep all failures;
 an external score or frame F1 above 0.80 does not meet the target-match spellF1
 goal, and repeated window selection does not establish independent generalization.
+
+## Experiment 27, frozen external representations with fold-fitted linear adaptation
+
+Experiment 26's unadapted full-probability blends scored 0.5400/0.5263/0.4918 OOF
+spellF1, below the fixed controls. Test target-domain calibration of the frozen
+experiment-24 representation rather than further external-only probability grids.
+No new manual labels or external fixture tuning. Freeze all neural weights and
+source normalization. Extract the two 32-dimensional temporal team representations
+at 5 Hz, respecting the original half resets and +/-6-second receptive field.
+
+Fit two target linear probes at each whole-window fold: an intercept-free H/A
+probe on the 32-dimensional team difference plus instantaneous point-logit
+difference (33 signed inputs), and an intercept-bearing dead/live probe on the
+temporal mean/absolute difference, absolute point-logit difference, ball visibility
+and graph confidence (67 invariant inputs). Use C=0.1, max_iter=2000, tol=1e-8,
+seed 0, natural frame mass and no balancing for both logistic classifiers.
+H/A uses known live training samples and symmetric zero-centered RMS scaling;
+dead/live uses all known training samples and training-only mean/std scaling.
+Clip normalized inputs to +/-8. Sample existing labels on the native coarse
+clock; unknown frames remain excluded. Fit all scalers/coefficients only after
+excluding the held-out window and the existing 60-second purge. Never fit on
+main validation. This adds 101 linear coefficients/intercepts, not neural tuning.
+
+Compare controls `fixed` and `typed_gated`, followed by three new policies:
+`adapted_dead` averages graph and adapted P(D) equally while retaining the fixed
+external instantaneous owner; `adapted_full` averages the complete fixed and
+adapted H/A/D posteriors equally; `adapted_only` uses the adapted posterior alone.
+Use switch cost 8, unchanged graph/instantaneous-owner boundaries and fold duration
+priors. No new boundary head, blend grid or post-hoc threshold. Fit one global
+pair of probes on known training windows only after OOF selection. Write the OOF
+decision before scoring only the selected policy on reused main validation.
+Keep the same references, full graded coverage, kickoff D facts and all negative
+results. Repeated OOF selection remains exploratory, not a guarantee against
+overfitting or an independent full-match score.
