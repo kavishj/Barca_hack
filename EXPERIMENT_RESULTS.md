@@ -24,6 +24,7 @@ All experiments keep the same 21,787 known training frames, five whole-window ho
 | 26: Frozen external full H/A/D blends | external_0.25 | 0.5400 | typed_gated | 0.4000 |
 | 27: Fold-fitted linear temporal adaptation | adapted_dead | 0.5180 | typed_gated | 0.4000 |
 | 28: Frozen CLAP audio replacement | clap_external | 0.6400 | clap_external | 0.5500 |
+| 29: Fixed PANNs/CLAP state fusion | dead_clap | 0.6400 | clap_external | 0.5500 |
 
 The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The historical graph/tree blend reached **0.5754** using one-seed fold estimates and **0.6133** on main. Matching the fold ensemble to the three deployment seeds lowered the best OOF estimate to **0.5133**, with unchanged main spellF1 **0.6133**. The one-seed blend's frame macro F1 was **0.8198**, which is not the ranking metric. These rankings disagree; neither establishes independent full-match improvement. The direct external expert then improved matched OOF spellF1 to **0.6067** and frame macro F1 to **0.8120**, with **0.6824** main spellF1. Its full-match CSV regenerates byte-identically from weights and observations, with no target reference labels. Typed adaptive turnover fees increased matched OOF spellF1 slightly to **0.6154**, but the selected candidate fell to **0.4000** on main. Removing marginal visibility evidence from dead/live odds did not improve OOF: the selected correction strength was zero, reproducing experiment 21 exactly. Neither change replaces the preserved candidates. The original 0.7200 main-score candidate remains preserved. The 0.80 ranking target has not been reached.
 
@@ -31,7 +32,7 @@ Each new study records its protocol before fitting, saves its OOF decision befor
 
 The same training and validation windows were examined in earlier development. OOF scores select models/decoders and carry selection bias; the main validation is also reused. Do not treat these numbers as an untouched test or a guarantee against overfitting. No private full-match F1 is available.
 
-Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run28`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
+Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run29`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
 
 Current candidate reproduction and tested inference commands are in [CURRENT_MODELS.md](CURRENT_MODELS.md). Full regression at the external owner snapshot: 122 tests, 121 passed and one CUDA-only skip locally; all 122 passed on Kaggle GPU. The later three-state snapshot passed all 126 tests on GPU; the subsequent four target-ablation checks also pass locally.
 
@@ -85,3 +86,11 @@ CLAP has 153,492,890 frozen parameters and encoded 12,712 two-second windows. No
 whistle labels or audio fine-tuning were used. The higher reused-window OOF result
 did not establish transfer to the reused main window; neither result demonstrates
 independent full-match F1. Experiment 29 fixes probability fusion before scoring.
+
+The fixed audio fusion did not improve spellF1. Dead-only CLAP replacement tied
+0.6400, while equal-mean dead and full-state fusion scored 0.613333 and 0.620000.
+The selected CLAP control retained 0.5500 main spellF1 and reproduced its CSV
+byte-identically. All 30 fold and six pooled scores, three controls, source input
+hashes and fold-only priors were independently verified. Two new algebra and
+team-symmetry checks passed. A fixed 20-epoch comparison now tests reduced training
+budget using the exact same fold preprocessing, rather than another encoder.

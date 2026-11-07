@@ -20,7 +20,7 @@ target OOF spellF1. These failures remain archived. The fixed CLAP replacement i
 **0.8438**), but its selected main score was **0.5500**. Its 153,492,890 parameters
 remain frozen, and the final model regenerated from weights on CPU. It is an
 archived experiment rather than a promoted replacement; fixed probability fusion
-is being evaluated separately.
+did not improve spellF1. A fixed shorter-training comparison is in progress.
 
 All five target training windows and the nine-possession main validation have
 already been reused. Model/decoder selection uses OOF, then only the selected
