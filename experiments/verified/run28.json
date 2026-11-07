@@ -1,0 +1,50 @@
+{
+  "verified": true,
+  "selected": "clap_external",
+  "oof": {
+    "fixed": {
+      "spell_f1_mean": 0.6066666666666667,
+      "macro_f1": 0.811964439152863,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "typed_gated": {
+      "spell_f1_mean": 0.6153846153846153,
+      "macro_f1": 0.8026183759663641,
+      "n_gt_spells": 33,
+      "n_pred_spells": 32
+    },
+    "clap_graph": {
+      "spell_f1_mean": 0.5288135593220338,
+      "macro_f1": 0.8232821763089321,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "clap_external": {
+      "spell_f1_mean": 0.64,
+      "macro_f1": 0.843823449683525,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.55,
+    "macro_f1": 0.6308752202641541,
+    "n_gt_spells": 9,
+    "n_pred_spells": 7
+  },
+  "fold_scores_verified": 20,
+  "pooled_scores_verified": 4,
+  "all_six_normalizers_refit_on_fold_training_masks": true,
+  "all_18_weight_hashes_verified": true,
+  "fixed_checkpoint_prompts_centers_and_unit_embeddings_verified": true,
+  "audio_finetuned": false,
+  "whistle_labels_added": false,
+  "selected_predictions_regenerate_byte_identically": true,
+  "source_inputs_hashes_verified": true,
+  "reference_files_unchanged": true,
+  "selected_new_neural_model_regenerated_on_cpu": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Repeated target-window selection and reused nine-possession validation; no independent full-match score"
+}

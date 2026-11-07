@@ -16,8 +16,11 @@ Later adaptive turnover fees increased OOF spellF1 to **0.6154** but fell to
 reproduced that result. Both are archived experiments; the two candidates above
 remain preserved. External temporal-control pretraining passed its public-match checks but neither
 owner-only transfer, full H/A/D blends nor fold-fitted linear adaptation improved
-target OOF spellF1. These failures remain archived. A fixed contrastive-audio
-replacement is a separate ongoing experiment; no new candidate is promoted.
+target OOF spellF1. These failures remain archived. The fixed CLAP replacement improved OOF spellF1 to **0.6400** (frame macro F1
+**0.8438**), but its selected main score was **0.5500**. Its 153,492,890 parameters
+remain frozen, and the final model regenerated from weights on CPU. It is an
+archived experiment rather than a promoted replacement; fixed probability fusion
+is being evaluated separately.
 
 All five target training windows and the nine-possession main validation have
 already been reused. Model/decoder selection uses OOF, then only the selected
