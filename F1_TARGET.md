@@ -359,3 +359,45 @@ on the corresponding training fold. No neural/encoder/probe refitting, labels,
 manual rules, duration changes or main-based parameter choices. Prefer lower
 gamma and then the fixed decoder on exact OOF ties. Select pooled training OOF
 spellF1 before one unchanged main evaluation; retain all failed variants.
+
+## Experiment 23, fixed before temporal external pretraining
+
+The instantaneous external owner can respond to momentary touches. Learn control
+over time using more of the same public event data, without additional target
+annotations. Use Sample Games 1/2 for fitting. Reserve Sample Game 3 for a single
+external transfer check: its metadata is DEMO_1002, dated 2020-05-08, with different
+half durations and a two-goal event sequence distinct from the target's supplied
+four-goal automatic tags. It is not another answer key for the target fixture.
+
+Derive weak external control sequences from the published event semantics:
+PASS/RECOVERY/SET PIECE/SHOT starts establish the recorded team's live control;
+BALL OUT ends, immediate FAULT RECEIVED, offside/end-half and goal ends establish
+D. Ignore CHALLENGE/CARD as ownership changes. A BALL LOST end clears its losing
+team only if it still owns the ball; do not erase an already recorded recovery
+by the opposite team. Same-frame conflicting controls become X, and stop events
+take priority. Start each half in D until a recorded restart; mask unresolved
+live tails. Use the existing closed-pass labels to fill unknown pass spans and
+mask contradictions. Never propagate labels across halves. D/X frames provide
+context but no owner supervision. These are weak external labels, not target GT.
+
+Freeze the experiment-17 graph encoder and experiment-20 linear probe. Extract
+team embeddings, signed point logits, ball visibility and graph confidence at
+5 Hz. Fit a shared width-32, four-block TCN with dilations 1/2/4/8 (about +/-6 s),
+dropout 0.15 and a zero-initialized residual owner head over the point logits.
+Add an invariant H/A turnover head with radius-1 coarse boundary targets and
+0.25 weighted BCE; cap positive weight at 20 and correct its prior at inference.
+Use seed 0, 60 epochs, 256-step cores, batch 8, AdamW LR/weight-decay 0.001 and
+cosine schedule. Fit normalization on Games 1/2 only. No early stopping or grid.
+
+Precompute consistent ball-masked embeddings. Each epoch, mask random contiguous
+1–20-second blocks covering approximately 20% of the external timeline,
+independently of labels. Preserve team symmetry and half resets. This trains the
+head to handle missing observations without changing supervision.
+
+After the fixed final epoch, compare conditional live-owner macro F1 and typed
+turnover F1 within 0.5 seconds on untouched external Game 3 against the original
+instantaneous probe. Neither metric may decrease, and at least one must improve,
+before target OOF expansion. These conditional external scores do not satisfy
+the requested target-match F1. No Game-3 checkpoint or hyperparameter selection.
+If this gate passes, preregister the target comparison before reading new target
+scores; retain the current fixed predictions and all external negative results.
