@@ -105,7 +105,7 @@ class Normalizer:
         embeddings = interpolate(audio, audio.embeddings, frames)
         available = interpolate(audio, audio.availability[:, None], frames)[:, 0]
         valid = available >= 0.95
-        if np.sum(valid) < components or not 1 <= components <= 512:
+        if np.sum(valid) < components or not 1 <= components <= audio.embeddings.shape[1]:
             raise ValueError("Too little available training audio for the fixed PCA size")
         with threadpool_limits(limits=4):
             pca = PCA(n_components=components, svd_solver="randomized", random_state=0).fit(embeddings[valid])

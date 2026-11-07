@@ -668,6 +668,8 @@ Keep the same two-second clips, 0.5-second centers, endpoint coverage, half padd
 and availability policy as PANNs/CLAP. Use the checkpoint's feature extractor and
 its default padding to 1,024 filterbank frames. No longer-context or preprocessing
 grid. Record all model/config hashes, the 768-feature schema and exact class IDs.
+Use CUDA float16 autocast for the frozen encoder and save float32 cache arrays;
+the downstream graph training remains float32.
 
 Keep the original graph model, 60 epochs, seeds 0/1/2, loss, decoder cost 8,
 duration priors and raw tracking/heuristic whistle inputs. Fit PCA-32 and scaling

@@ -110,7 +110,8 @@ class AudioCache:
 
     def __post_init__(self):
         n = len(self.centers)
-        if (self.embeddings.shape != (n, 512) or self.scores.shape != (n, 2)
+        if (self.embeddings.ndim!=2 or self.embeddings.shape[0]!=n or self.embeddings.shape[1]<32
+                or self.scores.shape != (n, 2)
                 or self.half_ids.shape != (n,) or self.availability.shape != (n,)
                 or not np.isfinite(self.embeddings).all() or not np.isfinite(self.scores).all()
                 or not np.isfinite(self.availability).all() or not np.isfinite(self.centers).all()
@@ -130,7 +131,9 @@ class AudioCache:
             raise ValueError("Audio cache half or fps mismatch")
 
     def save(self, path):
-        meta = dict(schema=1, halves=self.halves, fps=self.fps, provenance=self.provenance)
+        schema=1 if self.embeddings.shape[1]==512 else 2
+        meta = dict(schema=schema, halves=self.halves, fps=self.fps, provenance=self.provenance)
+        if schema==2:meta['embedding_dim']=int(self.embeddings.shape[1])
         np.savez_compressed(path, centers=self.centers, half_ids=self.half_ids,
                             embeddings=self.embeddings, scores=self.scores,
                             availability=self.availability, metadata=np.array(json.dumps(meta)))
@@ -139,8 +142,10 @@ class AudioCache:
     def load(cls, path):
         with np.load(path, allow_pickle=False) as a:
             m = json.loads(str(a["metadata"]))
-            if m["schema"] != 1:
+            if m["schema"] not in (1,2):
                 raise ValueError("Unknown audio cache schema")
+            expected=512 if m['schema']==1 else m['embedding_dim']
+            if a['embeddings'].ndim!=2 or a['embeddings'].shape[1]!=expected:raise ValueError('Audio cache embedding schema differs')
             return cls(a["centers"], a["half_ids"], a["embeddings"], a["scores"],
                        a["availability"], m["halves"], m["fps"], m["provenance"])
 

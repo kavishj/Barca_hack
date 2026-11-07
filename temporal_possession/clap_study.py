@@ -23,7 +23,7 @@ from .clap import MODEL,REVISION
 POLICIES=('fixed','typed_gated','clap_graph','clap_external')
 
 
-def fit_group(folder,prior_folder,base,audio,graph,codes,selected,config,device):
+def fit_group(folder,prior_folder,base,audio,graph,codes,selected,config,device,label='CLAP GRAPH'):
     folder=Path(folder);folder.mkdir(parents=True)
     normalizer=SymmetricNormalizer.fit(base,audio,selected);normalizer.save(folder/'preprocessing')
     gx,px=normalizer.transform(base,audio);dest=folder/'graph_tcn'
@@ -32,7 +32,7 @@ def fit_group(folder,prior_folder,base,audio,graph,codes,selected,config,device)
     info['audio_sha256']=audio.provenance['cache_input_sha256']
     save_json(dest/'model.json',info);np.savez_compressed(folder/'training_mask.npz',selected=selected)
     for seed in (0,1,2):
-        print('CLAP GRAPH fit',str(folder),'seed',seed,flush=True)
+        print(label,'fit',str(folder),'seed',seed,flush=True)
         model,fit=train_seed(gx,px,graph,codes,selected,config,'graph_tcn',seed,device)
         checkpoint=dest/f'seed_{seed}.pt';torch.save(model.state_dict(),checkpoint)
         fit['checkpoint_sha256']=sha(checkpoint);save_json(dest/f'seed_{seed}.json',fit);del model
