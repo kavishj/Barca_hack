@@ -122,3 +122,37 @@ a reliable whistle detector's event precision/recall. No whistle-event F1 is
 reported because there is no verified acoustic-event reference. A model with the
 highest score on this draft window is an experiment candidate, not a selected
 final competition submission.
+
+## Frozen contrastive audio comparison
+
+Experiment 28 in [F1_TARGET.md](F1_TARGET.md) fixes a separate audio replacement
+using [LAION CLAP](https://huggingface.co/laion/clap-htsat-unfused/tree/8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a)
+at revision `8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a` (Apache-2.0).
+The encoder stays frozen. Two-second clips use the same centers as PANNs, audio
+PTS aligned to video PTS, 48 kHz decoding and zeros outside each graded half.
+The checkpoint's repeat-padding supplies its expected input length.
+
+The cache contains 512-dimensional normalized audio embeddings and two relative
+scores from a fixed six-prompt comparison: referee whistle, mouth whistling,
+crowd, commentary, ball kick and stadium ambience. These are not calibrated
+whistle probabilities or new acoustic labels. Prompt strings, model-file hashes,
+parameter count, timing and source-cache fingerprint are recorded in provenance.
+There is no audio fine-tuning or prompt selection on match labels.
+
+The graph model retains its original architecture and training settings. New
+PCA-32 and scaling are fitted separately within each training fold, followed by
+three seeds per fold and final training (18 fits). Original tracking and heuristic
+whistle inputs remain available. Two controls and two fixed new policies are
+selected by pooled training-window spellF1 before only the winner is scored on
+the reused draft validation. The complete 136-test snapshot passed on Kaggle
+before extraction; results belong in [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).
+
+The private notebook is reproduced from [possession_clap.ipynb](notebooks/possession_clap.ipynb).
+Feature extraction accepts no label files:
+
+```bash
+python -m temporal_possession.clap \
+  --video /private/BAR-ATH_tactical.mp4 \
+  --reference-audio /private/panns_audio_cache.npz \
+  --out /private/clap_audio.npz --device cuda
+```
