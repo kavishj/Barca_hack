@@ -280,3 +280,27 @@ This repairs the ensemble-size mismatch; it does not turn reused windows into an
 untouched benchmark. Report per-fold scores and the difference between old and
 matched OOF estimates beside the selected main score. No new state model grid,
 validation-based cost choice, early stopping, labels or output correction.
+
+## Experiment 20, fixed before fitting the external probe
+
+Test the externally pretrained encoder as a direct ownership expert, bypassing
+the target-trained temporal owner head. Reuse experiment 17's frozen encoder;
+do not repeat or select a pretraining checkpoint. Encode its 11,904 external
+closed-pass samples and fit a zero-intercept L2 logistic classifier (C=0.1,
+max_iter=2000, tol=1e-8, natural frequency) on the 32-dimensional home-minus-away
+pooled embedding. No target-match labels enter encoder/probe fitting. A swapped
+team order negates the embedding difference and complements the owner posterior.
+
+Apply the probe to the original target graph at 5 Hz, interpolating within halves.
+Keep the graph's dead posterior. Mix its conditional H/A posterior with the
+external expert at weights 0.5, 0.75 or 1.0 only when the raw ball is observed;
+retain the original posterior at missing-ball frames. Add an observation-derived
+turnover boundary score: absolute change in consecutive external owner posteriors
+when both graph samples observe the ball, centred between those samples with the
+existing +/-3-frame target-band radius. Mask it at missing-ball frames and take
+the maximum with the original graph boundary posterior. No transition rewards.
+
+Compare those three weights with costs 1, 2, 4 and 8, plus unchanged graph/8 and
+graph/tree/2 controls. Same five fold models and training-only durations; select
+pooled OOF spellF1 before one main scoring. External pretraining/probe training
+scores do not count toward the requested target-match F1. Archive every variant.
