@@ -1,0 +1,46 @@
+{
+  "verified": true,
+  "selected": "control",
+  "control_policy": "clap_external",
+  "oof": {
+    "control": {
+      "spell_f1_mean": 0.64,
+      "macro_f1": 0.843823449683525,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "trees_dead": {
+      "spell_f1_mean": 0.5016949152542374,
+      "macro_f1": 0.804663343377816,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "trees_graph_mean": {
+      "spell_f1_mean": 0.5377049180327869,
+      "macro_f1": 0.7882767924965259,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    },
+    "trees_audio_mean": {
+      "spell_f1_mean": 0.6163934426229509,
+      "macro_f1": 0.8310124642939144,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.55,
+    "macro_f1": 0.6308752202641541,
+    "n_gt_spells": 9,
+    "n_pred_spells": 7
+  },
+  "fold_scores_verified": 20,
+  "pooled_scores_verified": 4,
+  "all_source_models_independently_verified": true,
+  "source_input_hashes_verified": true,
+  "control_predictions_verified_byte_identically": true,
+  "reference_files_unchanged": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Reused target OOF selection and nine-possession draft validation; not an independent full-match score"
+}

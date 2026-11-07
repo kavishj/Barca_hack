@@ -22,7 +22,7 @@ remain frozen, and the final model regenerated from weights on CPU. It is an
 archived experiment rather than a promoted replacement; fixed probability fusion
 did not improve spellF1. The fixed 20-epoch
 comparison also retained the control. A separate fixed tabular dead-ball expert
-is being evaluated without retraining models.
+also retained the control. A pinned AudioSet AST replacement is now being tested.
 
 All five target training windows and the nine-possession main validation have
 already been reused. Model/decoder selection uses OOF, then only the selected

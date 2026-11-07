@@ -26,6 +26,7 @@ All experiments keep the same 21,787 known training frames, five whole-window ho
 | 28: Frozen CLAP audio replacement | clap_external | 0.6400 | clap_external | 0.5500 |
 | 29: Fixed PANNs/CLAP state fusion | dead_clap | 0.6400 | clap_external | 0.5500 |
 | 30: Fixed 20-epoch CLAP training | early_external | 0.6033 | control (clap_external) | 0.5500 |
+| 31: Factorized tabular dead-ball expert | trees_audio_mean | 0.6164 | control (clap_external) | 0.5500 |
 
 The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The historical graph/tree blend reached **0.5754** using one-seed fold estimates and **0.6133** on main. Matching the fold ensemble to the three deployment seeds lowered the best OOF estimate to **0.5133**, with unchanged main spellF1 **0.6133**. The one-seed blend's frame macro F1 was **0.8198**, which is not the ranking metric. These rankings disagree; neither establishes independent full-match improvement. The direct external expert then improved matched OOF spellF1 to **0.6067** and frame macro F1 to **0.8120**, with **0.6824** main spellF1. Its full-match CSV regenerates byte-identically from weights and observations, with no target reference labels. Typed adaptive turnover fees increased matched OOF spellF1 slightly to **0.6154**, but the selected candidate fell to **0.4000** on main. Removing marginal visibility evidence from dead/live odds did not improve OOF: the selected correction strength was zero, reproducing experiment 21 exactly. Neither change replaces the preserved candidates. The original 0.7200 main-score candidate remains preserved. The 0.80 ranking target has not been reached.
 
@@ -33,7 +34,7 @@ Each new study records its protocol before fitting, saves its OOF decision befor
 
 The same training and validation windows were examined in earlier development. OOF scores select models/decoders and carry selection bias; the main validation is also reused. Do not treat these numbers as an untouched test or a guarantee against overfitting. No private full-match F1 is available.
 
-Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run30`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
+Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run31`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
 
 Current candidate reproduction and tested inference commands are in [CURRENT_MODELS.md](CURRENT_MODELS.md). Full regression at the external owner snapshot: 122 tests, 121 passed and one CUDA-only skip locally; all 122 passed on Kaggle GPU. The later three-state snapshot passed all 126 tests on GPU; the subsequent four target-ablation checks also pass locally.
 
@@ -110,3 +111,17 @@ ran exactly 20 epochs; all six fold masks and preprocessing files matched the
 and its corresponding cosine schedule. First-epoch losses matched the original
 runs exactly, supporting an isolated training-budget comparison. The control
 CSV was copied exactly; no new alternative main prediction was scored.
+
+The factorized tabular dead-ball expert did not improve OOF: tree-only D scored
+0.501695, tree/graph D mean 0.537705 and tree/PANNs/CLAP D mean 0.616393. Ownership
+was kept independent from the tabular owner; a probability-saturation guard
+preserved the frozen expert's owner even when the old P(D) rounded to one.
+All 20 fold and four pooled scores, source hashes and the byte-identical control
+were independently checked. The 0.6400 OOF control and 0.7200 preserved highest
+observed main candidate remain unchanged.
+
+The complete 146-test snapshot passed locally with one CUDA-only skip before
+the fixed AST experiment. Schema 2 adds explicit 768-dimensional audio embeddings;
+legacy 512-dimensional PANNs/CLAP caches keep schema 1. Native-rate timing and
+fold-only PCA tests pass for the new encoder. This is setup validation, not a new
+possession-score result.
