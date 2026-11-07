@@ -14,8 +14,10 @@ frames. Credit and source pin: [EXTERNAL_PRETRAINING.md](EXTERNAL_PRETRAINING.md
 Later adaptive turnover fees increased OOF spellF1 to **0.6154** but fell to
 **0.4000** on main. A visibility-likelihood ablation selected zero correction and
 reproduced that result. Both are archived experiments; the two candidates above
-remain preserved. External temporal-control pretraining is a separate study with
-a public third-match transfer gate before any target-window expansion.
+remain preserved. External temporal-control pretraining passed its public-match checks but neither
+owner-only transfer, full H/A/D blends nor fold-fitted linear adaptation improved
+target OOF spellF1. These failures remain archived. A fixed contrastive-audio
+replacement is a separate ongoing experiment; no new candidate is promoted.
 
 All five target training windows and the nine-possession main validation have
 already been reused. Model/decoder selection uses OOF, then only the selected
@@ -73,7 +75,7 @@ graded H/A/D coverage, X outside the halves and zero violations of the supplied
 pre-kickoff dead-ball fact.
 
 Source, preprocessing, model and reference hashes and all fold/pooled scores were
-checked independently. The regression suite ran 122 tests: 121 passed and one
-CUDA-only check was skipped locally; the preceding 101-test source snapshot also
-passed on Kaggle's GPU. Full-match inference from weights is an additional real
+checked independently. The regression suite ran 132 tests: 131 passed and one
+CUDA-only check was skipped locally; the 122- and 126-test external pretraining
+snapshots also passed fully on Kaggle's GPU. Full-match inference from weights is an additional real
 integration check. See [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).

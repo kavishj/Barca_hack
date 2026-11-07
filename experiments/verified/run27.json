@@ -1,0 +1,53 @@
+{
+  "verified": true,
+  "selected": "typed_gated",
+  "oof": {
+    "fixed": {
+      "spell_f1_mean": 0.6066666666666667,
+      "macro_f1": 0.811964439152863,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "typed_gated": {
+      "spell_f1_mean": 0.6153846153846153,
+      "macro_f1": 0.8026183759663641,
+      "n_gt_spells": 33,
+      "n_pred_spells": 32
+    },
+    "adapted_dead": {
+      "spell_f1_mean": 0.5180327868852459,
+      "macro_f1": 0.7969151159345377,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    },
+    "adapted_full": {
+      "spell_f1_mean": 0.43508771929824563,
+      "macro_f1": 0.7967138371689338,
+      "n_gt_spells": 33,
+      "n_pred_spells": 24
+    },
+    "adapted_only": {
+      "spell_f1_mean": 0.48571428571428577,
+      "macro_f1": 0.7865351636510924,
+      "n_gt_spells": 33,
+      "n_pred_spells": 23
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.39999999999999997,
+    "macro_f1": 0.4216842534482208,
+    "n_gt_spells": 9,
+    "n_pred_spells": 10
+  },
+  "fold_scores_verified": 25,
+  "pooled_scores_verified": 5,
+  "all_fold_masks_scalers_coefficients_refit_exactly": true,
+  "all_fold_and_global_adapted_scores_regenerated": true,
+  "held_out_window_and_purge_excluded_from_fitting": true,
+  "selected_predictions_regenerate_byte_identically": true,
+  "source_inputs_hashes_verified": true,
+  "reference_files_unchanged": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Reused target training-window OOF selection and nine-possession draft validation; not an independent full-match score"
+}

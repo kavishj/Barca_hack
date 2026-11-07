@@ -22,6 +22,7 @@ All experiments keep the same 21,787 known training frames, five whole-window ho
 | 22: Visibility likelihood ablation | 0.5__typed_gated | 0.6031 | 0.0__typed_gated | 0.4000 |
 | 25: Frozen external temporal owner | temporal_observed | 0.6034 | typed_gated | 0.4000 |
 | 26: Frozen external full H/A/D blends | external_0.25 | 0.5400 | typed_gated | 0.4000 |
+| 27: Fold-fitted linear temporal adaptation | adapted_dead | 0.5180 | typed_gated | 0.4000 |
 
 The original graph control has **0.5123 OOF / 0.7200 main spellF1**, with 0.7907 / 0.6792 frame macro F1. The historical graph/tree blend reached **0.5754** using one-seed fold estimates and **0.6133** on main. Matching the fold ensemble to the three deployment seeds lowered the best OOF estimate to **0.5133**, with unchanged main spellF1 **0.6133**. The one-seed blend's frame macro F1 was **0.8198**, which is not the ranking metric. These rankings disagree; neither establishes independent full-match improvement. The direct external expert then improved matched OOF spellF1 to **0.6067** and frame macro F1 to **0.8120**, with **0.6824** main spellF1. Its full-match CSV regenerates byte-identically from weights and observations, with no target reference labels. Typed adaptive turnover fees increased matched OOF spellF1 slightly to **0.6154**, but the selected candidate fell to **0.4000** on main. Removing marginal visibility evidence from dead/live odds did not improve OOF: the selected correction strength was zero, reproducing experiment 21 exactly. Neither change replaces the preserved candidates. The original 0.7200 main-score candidate remains preserved. The 0.80 ranking target has not been reached.
 
@@ -29,7 +30,7 @@ Each new study records its protocol before fitting, saves its OOF decision befor
 
 The same training and validation windows were examined in earlier development. OOF scores select models/decoders and carry selection bias; the main validation is also reused. Do not treat these numbers as an untouched test or a guarantee against overfitting. No private full-match F1 is available.
 
-Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run26`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
+Private reproducibility artifacts are under `/workspace/kaggle-run/run09` through `run27`, including per-fold predictions, pooled scores, unsuccessful variants, checkpoints, input hashes and independent verification reports. Experimental plans and code are committed on `codex/possession-f1-080`; there has been no GitHub push, environment publication or competition submission.
 
 Current candidate reproduction and tested inference commands are in [CURRENT_MODELS.md](CURRENT_MODELS.md). Full regression at the external owner snapshot: 122 tests, 121 passed and one CUDA-only skip locally; all 122 passed on Kaggle GPU. The later three-state snapshot passed all 126 tests on GPU; the subsequent four target-ablation checks also pass locally.
 
@@ -55,3 +56,12 @@ selected CSV reproduced previous results exactly. Frozen external probabilities
 regenerated from source weights and observations. The next fixed study tests
 fold-fitted linear adaptation of frozen temporal representations rather than
 more unadapted source-probability weights.
+
+Fold-fitted linear adaptation also failed to improve OOF spellF1: dead-only blend
+0.5180, full blend 0.4351 and adapted-only 0.4857. All five fold masks excluded the
+held window and its 60-second purge; every scaler/coefficient and adapted-score
+array refitted exactly. No neural weights were fitted on target labels. The
+selected control and full-match CSV reproduced the previous result. The full
+132-test snapshot passed locally with one CUDA-only skip. A separately fixed
+contrastive-audio experiment is now testing CLAP without audio labels or prompt
+tuning. The preserved 0.7200 candidate and the unmet 0.80 target are unchanged.
