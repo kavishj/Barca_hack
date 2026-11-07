@@ -535,3 +535,41 @@ decision before scoring only the selected policy on reused main validation.
 Keep the same references, full graded coverage, kickoff D facts and all negative
 results. Repeated OOF selection remains exploratory, not a guarantee against
 overfitting or an independent full-match score.
+
+## Experiment 28, fixed frozen contrastive audio replacement
+
+The source-only tracking models and target linear adaptation did not improve
+OOF spellF1. Test an independent audio representation: frozen
+`laion/clap-htsat-unfused`, revision `8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a`
+(Apache-2.0, LAION CLAP). Use its 512-dimensional normalized audio embeddings and
+two fixed prompt-relative scores. No match audio fine-tuning, whistle annotations,
+prompt tuning or acoustically derived reference labels.
+
+Decode original audio PTS relative to video PTS at 48 kHz, preserving AAC priming,
+gaps and half boundaries. Use the same two-second clips, 0.5-second centers and
+endpoint coverage as the old PANNs cache. Use the checkpoint's repeat-padding and
+unfused feature extraction. Fixed prompts, in order: `The sound of a referee
+blowing a whistle during a soccer match.`, `The sound of a person whistling with
+their mouth.`, `The sound of a crowd cheering in a soccer stadium.`, `The sound of
+a commentator speaking during a soccer match.`, `The sound of a soccer ball being
+kicked.`, `The ambient sound of a soccer stadium without a whistle.` Use the
+checkpoint's learned audio/text logit scale and softmax across these six prompts;
+keep the first two as relative scores, not calibrated referee-whistle probabilities.
+
+Replace only the old learned-audio embedding/score cache in the original graph
+TCN pipeline. Preserve tracking, heuristic whistle features, architecture, loss,
+60 epochs and seeds 0/1/2. Fit new PCA-32 and all normalization only on each fold's
+remaining known training frames after the 60-second purge. Use matched three-seed
+predictions for all five whole-window holdouts and the final model; 18 new fits.
+Retain control OOF predictions and unchanged reference hashes.
+
+Compare `fixed` and `typed_gated` controls, then the new graph/audio posterior at
+cost 8 (`clap_graph`) and that same posterior with the frozen experiment-20
+instantaneous owner on observed-ball frames (`clap_external`). Both new variants
+use the maximum of their new graph boundary and the original observed-ball
+external owner variation. No blend or cost grid. Keep original fold duration
+priors and kickoff D constraints. Write the pooled-OOF spellF1 selection before
+scoring only that selected policy on reused main validation. Archive failures,
+verify weights/input hashes and regenerate the selected CSV. A high frame/audio
+score is not target spellF1 achievement, and these repeatedly reused windows
+cannot establish independent full-match performance.
