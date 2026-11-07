@@ -573,3 +573,30 @@ scoring only that selected policy on reused main validation. Archive failures,
 verify weights/input hashes and regenerate the selected CSV. A high frame/audio
 score is not target spellF1 achievement, and these repeatedly reused windows
 cannot establish independent full-match performance.
+
+## Experiment 29, fixed PANNs/CLAP fusion before new ensemble scores
+
+The fixed CLAP replacement improved matched OOF spellF1 to 0.6400 (frame macro
+F1 0.843823) but scored 0.5500 on reused main validation. Do not promote it over
+the preserved candidates or interpret its frame score as the target. Test whether
+separating dead/live evidence from ownership and averaging two audio encoders
+reduces variance. No new model, scaler, weight, threshold or decoder fitting.
+
+Compare `fixed`, `typed_gated` and experiment-28 `clap_external` as controls.
+Add three fixed policies: `dead_clap` replaces P(D) with the CLAP graph P(D) but
+preserves the experiment-20 conditional owner everywhere; `dead_mean` averages
+PANNs and CLAP P(D) equally while preserving that same owner; `state_mean` averages
+the complete experiment-20 and experiment-28 posteriors equally. Both existing
+posteriors use the same frozen instantaneous external owner on observed-ball
+frames. Missing-ball ownership is precisely the difference between dead-only and
+full-state fusion; no reference labels determine availability or weighting.
+
+Use the new CLAP graph boundary for `dead_clap`; use the equal mean of the two
+graph boundary scores for the two equal-mean variants. In all new policies take
+the maximum with the original observed-ball external owner variation. Switch
+cost remains 8, duration priors remain unchanged, and kickoff D facts apply.
+Matched three-seed folds, five whole-window holdouts, the 60-second purge and
+reference hashes remain unchanged. Verify all three controls, select pooled OOF
+spellF1 with controls first on ties, save the decision and score only the winner
+on reused main. Keep all failures and complete graded coverage. This repeated
+development selection still cannot prove independent full-match generalization.
