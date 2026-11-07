@@ -40,6 +40,7 @@
   "fixed_checkpoint_prompts_centers_and_unit_embeddings_verified": true,
   "audio_finetuned": false,
   "whistle_labels_added": false,
+  "external_owner_and_boundary_recomputed_from_weights": true,
   "selected_predictions_regenerate_byte_identically": true,
   "source_inputs_hashes_verified": true,
   "reference_files_unchanged": true,

@@ -78,7 +78,7 @@ graded H/A/D coverage, X outside the halves and zero violations of the supplied
 pre-kickoff dead-ball fact.
 
 Source, preprocessing, model and reference hashes and all fold/pooled scores were
-checked independently. The regression suite ran 136 tests: 135 passed and one
-CUDA-only check was skipped locally; all 136 passed on Kaggle's GPU before the
-fixed contrastive-audio experiment. Full-match inference from weights is an
+checked independently. The regression suite ran 140 tests: 139 passed and one
+CUDA-only check was skipped locally; all 140 passed on Kaggle's GPU before the
+fixed shorter-training experiment. Full-match inference from weights is an
 additional real integration check. See [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md).

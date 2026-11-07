@@ -94,3 +94,10 @@ byte-identically. All 30 fold and six pooled scores, three controls, source inpu
 hashes and fold-only priors were independently verified. Two new algebra and
 team-symmetry checks passed. A fixed 20-epoch comparison now tests reduced training
 budget using the exact same fold preprocessing, rather than another encoder.
+
+The fixed external ownership expert and its variation boundary were additionally
+recomputed directly from its encoder/probe weights, with no target reference
+files. Both matched their saved arrays exactly. Repeating the selected CLAP
+reproduction with those regenerated inputs again produced the exact CSV. The
+complete 140-test snapshot passed locally (one CUDA-only skip) and on Kaggle GPU
+before the fixed shorter-training experiment.
