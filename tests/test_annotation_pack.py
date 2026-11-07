@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 from tools.annotation_pack import (N_FRAMES, build, default_plan, empty_session,
                                    export_reviewed, validate_plan)
@@ -101,12 +102,25 @@ class AnnotationPackTests(unittest.TestCase):
 
     def test_build_starts_empty_and_embeds_only_public_calibration_labels(self):
         with tempfile.TemporaryDirectory() as directory:
-            build(default_plan(), directory)
-            path = Path(directory)
+            # Synthetic renderer fixture only: never require target labels on an
+            # external-only training machine, and never write to the real key.
+            root = Path(directory)
+            public = root / "evaluation/gt/BAR-ATH_possession_gt_public.csv"
+            public.parent.mkdir(parents=True)
+            with public.open("w", newline="") as handle:
+                writer = csv.writer(handle)
+                writer.writerow(["frame", "label"])
+                writer.writerows((f, "H" if f < 13000 else "D")
+                                 for f in range(12000, 15750))
+            path = root / "pack"
+            with mock.patch("tools.annotation_pack.ROOT", root):
+                build(default_plan(), path)
             session = json.loads((path / "blank-review.json").read_text())
             self.assertTrue(all(not e["boundaries"] and e["status"] == "draft"
                                 for e in session["windows"].values()))
             self.assertIn('"calibration_truth":', (path / "review.html").read_text())
+            self.assertIn('[[12000, "H"], [13000, "D"], [15750, "X"]]',
+                          (path / "review.html").read_text())
             self.assertNotIn("/*__PACK_DATA__*/null", (path / "review.html").read_text())
 
 
