@@ -65,3 +65,8 @@ selected control and full-match CSV reproduced the previous result. The full
 132-test snapshot passed locally with one CUDA-only skip. A separately fixed
 contrastive-audio experiment is now testing CLAP without audio labels or prompt
 tuning. The preserved 0.7200 candidate and the unmet 0.80 target are unchanged.
+
+Before experiment 28's audio extraction, the complete 136-test snapshot passed
+on Kaggle GPU. Locally 135 passed with one CUDA-only skip. The pinned CLAP model
+loaded successfully and extraction started; this is runtime validation, not a
+new possession-score result.
