@@ -62,7 +62,8 @@ def target_state(policy,gp,gq,old_owner,turn_q,available,temporal_owner,all_avai
     return state('1.0',(gp,gq),None,owner,turn_q,use)[0],np.maximum(gq,turn_q)
 
 
-def run(args):
+def run(args,policies=POLICIES,score_name='home',state_fn=target_state,
+        experiment_kind='frozen_external_temporal_owner_ablation',protocol_number=25):
     original,matched,direct,turnovers,out=map(Path,(args.source_study,args.matched_study,args.direct_study,args.turnover_study,args.out))
     if out.exists():raise ValueError('Use a fresh temporal target comparison directory')
     base,graph=FeatureCache.load(args.features),GraphCache.load(args.graph)
@@ -73,7 +74,7 @@ def run(args):
         if sha(getattr(args,name))!=source['fingerprints'][key]:raise ValueError('Target observation changed')
     with np.load(args.owner_scores,allow_pickle=False) as d:old_owner,turn_q,available=d['home'],d['boundary'],d['available']
     with np.load(args.temporal_scores,allow_pickle=False) as d:
-        temporal_owner,all_available=d['home'],d['available_all'];meta=json.loads(str(d['metadata']))
+        temporal_owner,all_available=d[score_name],d['available_all'];meta=json.loads(str(d['metadata']))
         np.testing.assert_array_equal(available,d['available'])
     if meta['target_labels_used'] or not meta['external_gate_passed'] or meta['feature_sha256']!=sha(args.features) or meta['graph_sha256']!=sha(args.graph):
         raise ValueError('Temporal expert gate/source mismatch')
@@ -82,10 +83,10 @@ def run(args):
     train,validation=read_labels(args.train_labels,len(base.x)),read_labels(args.validation_labels,len(base.x))
     selected,valid=training_mask(base,train,validation,60*base.fps);codes=np.where(selected,train,3)
     out.mkdir(parents=True)
-    plan=dict(kind='frozen_external_temporal_owner_ablation',policies=POLICIES,feature_sha256=sha(args.features),graph_sha256=sha(args.graph),
+    plan=dict(kind=experiment_kind,policies=policies,feature_sha256=sha(args.features),graph_sha256=sha(args.graph),
         temporal_sha256=sha(args.temporal_scores),owner_sha256=sha(args.owner_scores),train_sha256=sha(args.train_labels),
         validation_sha256=sha(args.validation_labels),external_metadata=meta,target_refit=False,validation_used_for_selection=False,
-        selection_bias=True,validation_reused=True,protocol='F1_TARGET.md experiment 25',protocol_sha256=sha(Path(__file__).resolve().parents[1]/'F1_TARGET.md'))
+        selection_bias=True,validation_reused=True,protocol=f'F1_TARGET.md experiment {protocol_number}',protocol_sha256=sha(Path(__file__).resolve().parents[1]/'F1_TARGET.md'))
     save_json(out/'experiment.json',plan);inputs={}
     def scores(relative,global_model=False):
         folder=original if global_model else matched;path=folder/relative/'graph_tcn/scores.npz'
@@ -94,17 +95,17 @@ def run(args):
         path=original/relative/'graph_tcn/model.json';inputs['original/'+str(path.relative_to(original))]=sha(path)
         return p,q,json.loads(path.read_text())['durations']
     def prediction(policy,gp,gq,durations,prior,half=None):
-        p,q=target_state(policy,gp,gq,old_owner,turn_q,available,temporal_owner,all_available)
+        p,q=state_fn(policy,gp,gq,old_owner,turn_q,available,temporal_owner,all_available)
         if policy=='typed_gated':return decode_scores(p,gq,turn_q,gated,base,durations,prior,policy,half)
         return decoded(p,q,base,8.,durations,half)
-    pooled={n:np.full(len(codes),'X',dtype='<U1') for n in POLICIES};fold_scores=[];priors=[]
+    pooled={n:np.full(len(codes),'X',dtype='<U1') for n in policies};fold_scores=[];priors=[]
     for i,(first,stop) in enumerate(known_runs(codes!=3)):
         held=np.full(len(codes),3,np.int8);held[first:stop]=codes[first:stop];remainder=codes.copy();remainder[first:stop]=3
         chosen,_=training_mask(base,remainder,held,60*base.fps);chosen&=~near(valid,60*base.fps)
         prior,stats=training_prior(np.where(chosen,remainder,3));priors.append(dict(prior=prior,**stats))
         relative=Path('cv')/f'fold_{i}';folder=out/relative;folder.mkdir(parents=True);gp,gq,durations=scores(relative)
         half=next(h for h,a,b in base.halves if a<=first<stop<=b+1);result={}
-        for policy in POLICIES:
+        for policy in policies:
             labels=prediction(policy,gp,gq,durations,prior,half);write_labels(folder/(policy+'.csv'),labels)
             pooled[policy][first:stop]=labels[first:stop];result[policy]=metrics(held,labels,0)
             if policy in POLICIES[:2]:
@@ -118,7 +119,7 @@ def run(args):
     for n,p in pooled.items():write_labels(out/('oof_'+n+'.csv'),p)
     prior,stats=training_prior(codes);gp,gq,durations=scores(Path('global'),True)
     labels=prediction(winner,gp,gq,durations,prior);write_labels(out/'selected_predictions.csv',labels)
-    p,q=target_state(winner,gp,gq,old_owner,turn_q,available,temporal_owner,all_available)
+    p,q=state_fn(winner,gp,gq,old_owner,turn_q,available,temporal_owner,all_available)
     np.savez_compressed(out/'selected_scores.npz',probability=p,boundary=q)
     save_json(out/'inputs.json',inputs)
     save_json(out/'report.json',dict(experiment=plan,decision=decision,selected=winner,fold_scores=fold_scores,training_priors=priors,
