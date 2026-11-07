@@ -682,3 +682,30 @@ Save the pooled-OOF spellF1 decision before scoring only the winner on reused ma
 If control wins, preserve its output and main result. Keep all references,
 coverage and kickoff constraints. A stronger pretrained audio benchmark or frame
 F1 is not achievement of target-match spellF1 or independent generalization.
+
+## Experiment 33, fixed automatic phase hint during ball blackouts
+
+The supplied automatic Smart Tagging XML gives attacking-team phase intervals.
+The existing input cache has phase coverage on 12,266 of 64,643 graded missing-ball
+frames. Test this provider cue only where the ball is unobserved, independently
+of the ongoing AST acoustic experiment. It is an input prior, not a new manual
+annotation or possession reference.
+
+Use only the existing possession-phase definitions: BUILD UP, PROGRESSION,
+CREATING CHANCES, LONG BALL and ATTACKING TRANSITION. Ignore territorial and
+defensive tags, set pieces and N/A teams. Count overlaps separately by team; emit
+no hint where both teams occur. Restrict intervals to their recorded half and
+never carry a hint past its end or across halftime. Same-team duplicate phases
+do not increase confidence. Map a unique team to fixed conditional probability
+0.75 for that team. No timestamp shifts, corrections or label-derived confidence.
+
+The control is experiment 31's unchanged OOF-selected candidate. Compare two
+policies: `hint_mean` equally averages that candidate's conditional owner and the
+provider hint, while `hint_only` uses the fixed provider probability. Apply either
+only on graded raw-ball-missing frames with a unique hint. Keep P(D), observed-ball
+ownership, boundary scores, switch cost 8, durations and kickoff facts unchanged.
+Use frozen matched CLAP graph folds and the original external owner, verifying
+that their control reproduces the selected source. No weights or scalers fitted.
+Select pooled OOF spellF1 with control first on ties; save that decision before
+scoring only its winner on reused main. Retain the control output if it wins.
+Provider tags and repeated windows do not establish independent evaluation.
