@@ -174,9 +174,10 @@ def place_samples(destination, samples, start, spans):
         spans.append([a, b])
 
 
-def decode_audio(video_path, out, n_frames, fps):
+def decode_audio(video_path, out, n_frames, fps, sample_rate=SAMPLE_RATE):
     import av
-    n = int(Fraction(n_frames, fps) * SAMPLE_RATE)
+    if not isinstance(sample_rate,int) or sample_rate<=0:raise ValueError('Invalid audio sample rate')
+    n = int(Fraction(n_frames, fps) * sample_rate)
     wave = np.memmap(out, mode="w+", dtype=np.float32, shape=(n,))
     wave[:] = 0
     spans = []
@@ -186,12 +187,12 @@ def decode_audio(video_path, out, n_frames, fps):
         if video.frames != n_frames or video.average_rate != fps:
             raise ValueError("Video frame count or fps differs from the feature cache")
         origin = (video.start_time or 0) * video.time_base
-        resampler = av.AudioResampler(format="fltp", layout="mono", rate=SAMPLE_RATE)
+        resampler = av.AudioResampler(format="fltp", layout="mono", rate=sample_rate)
 
         def write(frame):
             if frame.pts is None or frame.time_base is None:
                 raise ValueError("Resampled audio lacks a timestamp")
-            start = round((frame.pts * frame.time_base - origin) * SAMPLE_RATE)
+            start = round((frame.pts * frame.time_base - origin) * sample_rate)
             place_samples(wave, frame.to_ndarray().reshape(-1), start, spans)
 
         for frame in container.decode(audio):

@@ -109,8 +109,9 @@ class Normalizer:
             raise ValueError("Too little available training audio for the fixed PCA size")
         with threadpool_limits(limits=4):
             pca = PCA(n_components=components, svd_solver="randomized", random_state=0).fit(embeddings[valid])
-        names = tuple(cache.names) + tuple(f"audio_pc_{i:02}" for i in range(components)) + (
-            "panns_whistle", "panns_whistling", "audio_available")
+        score_names=tuple(audio.provenance.get('score_names',('panns_whistle','panns_whistling')))
+        if len(score_names)!=2 or len(set(score_names))!=2:raise ValueError('Expected two named audio scores')
+        names = tuple(cache.names) + tuple(f"audio_pc_{i:02}" for i in range(components)) + score_names + ('audio_available',)
         provisional = cls(tuple(cache.names), names, None, None,
                           pca.mean_.astype(np.float32), pca.components_.astype(np.float32))
         raw = provisional.raw(cache, audio)
