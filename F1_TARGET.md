@@ -1,10 +1,16 @@
 # Target: official spellF1 at least 0.80
 
-The working candidate scores 0.7200 spellF1 and 0.6792 frame macro F1 on the
-unchanged nine-possession draft validation. Its five training-window holdouts
-score 0.5123 spellF1. The 5.94B frozen-video addition kept validation spellF1 at
-0.7200, lowered frame macro F1 to 0.6626 and lowered training OOF spellF1 to
-0.4207, so the graph + TCN remains the candidate.
+The original graph candidate retains the highest observed main score: 0.7200
+spellF1 and 0.6792 frame macro F1 on the unchanged nine-possession draft validation.
+Its historical single-seed training OOF spellF1 is 0.5123. The 0.80 ranking target
+has not been reached.
+
+Experiment 20's direct external owner expert improves matched three-seed training
+OOF spellF1 from 0.5133 to 0.6067, with 0.8120 frame macro F1. Its selected main
+spellF1 is 0.6824 and frame macro F1 is 0.6485. It remains an experimental candidate;
+the original prediction file is preserved. Fresh full-match inference from saved
+weights, without target reference labels, reproduces its CSV byte-identically.
+See EXPERIMENT_RESULTS.md for all verified outcomes and evaluation limitations.
 
 ## Evaluation rules
 

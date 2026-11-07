@@ -1,5 +1,11 @@
 # `<team_name>`: ball possession for More than a Hack 2027
 
+Current graph/audio and external-pretraining experiments are summarized in
+[EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md), with protocols in
+[F1_TARGET.md](F1_TARGET.md). The best observed draft-validation spellF1 is
+0.7200; the 0.80 ranking target remains open. The entry and reproduction
+instructions below describe the original v6 submission.
+
 This is our entry for **More than a Hack 2027, Phase 1: Ball Possession** (Metrica Sports, FC
 Barcelona and Mobile World Capital Barcelona). For each of the 199,319 frames of the BAR–ATH
 tactical video, it labels who has the ball:

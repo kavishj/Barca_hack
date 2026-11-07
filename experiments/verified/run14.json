@@ -1,0 +1,75 @@
+{
+  "verified": true,
+  "selected": "graph__8",
+  "oof_scores": {
+    "graph__8": {
+      "spell_f1_mean": 0.512280701754386,
+      "macro_f1": 0.790704823563031,
+      "n_pred_spells": 24,
+      "n_gt_spells": 33
+    },
+    "trees__1": {
+      "spell_f1_mean": 0.4842105263157895,
+      "macro_f1": 0.7972146696933438,
+      "n_pred_spells": 24,
+      "n_gt_spells": 33
+    },
+    "trees__2": {
+      "spell_f1_mean": 0.4814814814814815,
+      "macro_f1": 0.7927628196420283,
+      "n_pred_spells": 21,
+      "n_gt_spells": 33
+    },
+    "trees__4": {
+      "spell_f1_mean": 0.4814814814814815,
+      "macro_f1": 0.7927628196420283,
+      "n_pred_spells": 21,
+      "n_gt_spells": 33
+    },
+    "trees__8": {
+      "spell_f1_mean": 0.4461538461538462,
+      "macro_f1": 0.7798582685204737,
+      "n_pred_spells": 19,
+      "n_gt_spells": 33
+    },
+    "blend__1": {
+      "spell_f1_mean": 0.4413793103448276,
+      "macro_f1": 0.7842604260211427,
+      "n_pred_spells": 25,
+      "n_gt_spells": 33
+    },
+    "blend__2": {
+      "spell_f1_mean": 0.4631578947368421,
+      "macro_f1": 0.7940811434135974,
+      "n_pred_spells": 24,
+      "n_gt_spells": 33
+    },
+    "blend__4": {
+      "spell_f1_mean": 0.509090909090909,
+      "macro_f1": 0.7963955936357695,
+      "n_pred_spells": 22,
+      "n_gt_spells": 33
+    },
+    "blend__8": {
+      "spell_f1_mean": 0.5,
+      "macro_f1": 0.7873872806502605,
+      "n_pred_spells": 19,
+      "n_gt_spells": 33
+    }
+  },
+  "selected_main": {
+    "spell_f1_mean": 0.7200000000000001,
+    "macro_f1": 0.679217402885496,
+    "n_pred_spells": 6,
+    "n_gt_spells": 9
+  },
+  "all_45_fold_scores_verified": true,
+  "all_9_pooled_scores_verified": true,
+  "all_6_model_hashes_verified": true,
+  "original_preprocessing_and_graph_scores_unchanged": true,
+  "reference_hashes_unchanged": true,
+  "byte_identical_regeneration": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "OOF model selection and reused nine-possession validation; not independent full-match evaluation"
+}

@@ -1,0 +1,74 @@
+{
+  "verified": true,
+  "selected": "blend__1",
+  "main": {
+    "spell_f1_mean": 0.6133333333333334,
+    "macro_f1": 0.5826487214196953,
+    "n_gt_spells": 9,
+    "n_pred_spells": 6
+  },
+  "oof": {
+    "graph__1": {
+      "spell_f1_mean": 0.4317460317460317,
+      "macro_f1": 0.7869066514750057,
+      "n_gt_spells": 33,
+      "n_pred_spells": 30
+    },
+    "graph__2": {
+      "spell_f1_mean": 0.4655737704918034,
+      "macro_f1": 0.7938852460697298,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    },
+    "graph__4": {
+      "spell_f1_mean": 0.48813559322033895,
+      "macro_f1": 0.7974820922118949,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "graph__8": {
+      "spell_f1_mean": 0.48813559322033895,
+      "macro_f1": 0.7945752802294397,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "blend__1": {
+      "spell_f1_mean": 0.5133333333333334,
+      "macro_f1": 0.8064657808248227,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "blend__2": {
+      "spell_f1_mean": 0.48571428571428577,
+      "macro_f1": 0.8032600134629796,
+      "n_gt_spells": 33,
+      "n_pred_spells": 23
+    },
+    "blend__4": {
+      "spell_f1_mean": 0.5018181818181817,
+      "macro_f1": 0.8073964917376841,
+      "n_gt_spells": 33,
+      "n_pred_spells": 22
+    },
+    "blend__8": {
+      "spell_f1_mean": 0.4769230769230769,
+      "macro_f1": 0.7755815533466089,
+      "n_gt_spells": 33,
+      "n_pred_spells": 19
+    }
+  },
+  "fold_scores_verified": 40,
+  "pooled_scores_verified": 8,
+  "fold_checkpoints_verified": 15,
+  "new_fold_fits": 10,
+  "original_seed0_checkpoints_unchanged": true,
+  "global_weights_and_scores_unchanged": true,
+  "preprocessing_unchanged": true,
+  "source_hashes_verified": true,
+  "reference_hashes_unchanged": true,
+  "three_seed_average_verified": true,
+  "regenerated_predictions_byte_identical": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Matched OOF ensemble size; selection still uses reused windows and main is a reused nine-possession validation"
+}

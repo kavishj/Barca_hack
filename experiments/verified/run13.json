@@ -1,0 +1,80 @@
+{
+  "verified": true,
+  "selected": "graph_tree__2",
+  "oof": {
+    "graph__8": {
+      "spell_f1_mean": 0.512280701754386,
+      "macro_f1": 0.790704823563031,
+      "n_gt_spells": 33,
+      "n_pred_spells": 24
+    },
+    "graph_tree__2": {
+      "spell_f1_mean": 0.5754385964912282,
+      "macro_f1": 0.819810741320547,
+      "n_gt_spells": 33,
+      "n_pred_spells": 24
+    },
+    "graph_tcn__1": {
+      "spell_f1_mean": 0.47868852459016387,
+      "macro_f1": 0.7908214451781773,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    },
+    "graph_tcn__2": {
+      "spell_f1_mean": 0.4474576271186441,
+      "macro_f1": 0.7822548946218557,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "graph_tcn__4": {
+      "spell_f1_mean": 0.45517241379310347,
+      "macro_f1": 0.7825892332324699,
+      "n_gt_spells": 33,
+      "n_pred_spells": 25
+    },
+    "graph_tcn__8": {
+      "spell_f1_mean": 0.45517241379310347,
+      "macro_f1": 0.7825892332324699,
+      "n_gt_spells": 33,
+      "n_pred_spells": 25
+    },
+    "three_way__1": {
+      "spell_f1_mean": 0.5586206896551723,
+      "macro_f1": 0.8125196970764179,
+      "n_gt_spells": 33,
+      "n_pred_spells": 25
+    },
+    "three_way__2": {
+      "spell_f1_mean": 0.5491525423728814,
+      "macro_f1": 0.8126220476839535,
+      "n_gt_spells": 33,
+      "n_pred_spells": 26
+    },
+    "three_way__4": {
+      "spell_f1_mean": 0.4962962962962963,
+      "macro_f1": 0.8053238397274726,
+      "n_gt_spells": 33,
+      "n_pred_spells": 21
+    },
+    "three_way__8": {
+      "spell_f1_mean": 0.5076923076923077,
+      "macro_f1": 0.8041692947851051,
+      "n_gt_spells": 33,
+      "n_pred_spells": 19
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.6133333333333334,
+    "macro_f1": 0.5826487214196953,
+    "n_gt_spells": 9,
+    "n_pred_spells": 6
+  },
+  "fold_scores_verified": 50,
+  "pooled_scores_verified": 10,
+  "source_score_hashes_verified": true,
+  "reference_hashes_unchanged": true,
+  "selected_output_regenerates_byte_identically": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Selection on reused labelled windows; no independent full-match performance claim"
+}

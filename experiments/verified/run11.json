@@ -1,0 +1,75 @@
+{
+  "verified": true,
+  "selected": "blend__2",
+  "oof_scores": {
+    "graph__8": {
+      "spell_f1_mean": 0.512280701754386,
+      "macro_f1": 0.790704823563031,
+      "n_pred_spells": 24,
+      "n_gt_spells": 33
+    },
+    "trees__1": {
+      "spell_f1_mean": 0.44363636363636366,
+      "macro_f1": 0.7871538847737304,
+      "n_pred_spells": 22,
+      "n_gt_spells": 33
+    },
+    "trees__2": {
+      "spell_f1_mean": 0.44528301886792454,
+      "macro_f1": 0.7786333408367557,
+      "n_pred_spells": 20,
+      "n_gt_spells": 33
+    },
+    "trees__4": {
+      "spell_f1_mean": 0.46923076923076923,
+      "macro_f1": 0.7815843072442615,
+      "n_pred_spells": 19,
+      "n_gt_spells": 33
+    },
+    "trees__8": {
+      "spell_f1_mean": 0.43076923076923085,
+      "macro_f1": 0.770399688520489,
+      "n_pred_spells": 19,
+      "n_gt_spells": 33
+    },
+    "blend__1": {
+      "spell_f1_mean": 0.535593220338983,
+      "macro_f1": 0.814657033055798,
+      "n_pred_spells": 26,
+      "n_gt_spells": 33
+    },
+    "blend__2": {
+      "spell_f1_mean": 0.5754385964912282,
+      "macro_f1": 0.819810741320547,
+      "n_pred_spells": 24,
+      "n_gt_spells": 33
+    },
+    "blend__4": {
+      "spell_f1_mean": 0.509090909090909,
+      "macro_f1": 0.809943762333177,
+      "n_pred_spells": 22,
+      "n_gt_spells": 33
+    },
+    "blend__8": {
+      "spell_f1_mean": 0.49230769230769234,
+      "macro_f1": 0.7804132781068476,
+      "n_pred_spells": 19,
+      "n_gt_spells": 33
+    }
+  },
+  "selected_main": {
+    "spell_f1_mean": 0.6133333333333334,
+    "macro_f1": 0.5826487214196953,
+    "n_pred_spells": 6,
+    "n_gt_spells": 9
+  },
+  "all_45_fold_scores_verified": true,
+  "all_9_pooled_scores_verified": true,
+  "all_6_model_hashes_verified": true,
+  "original_preprocessing_and_graph_scores_unchanged": true,
+  "reference_hashes_unchanged": true,
+  "byte_identical_regeneration": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "OOF model selection and reused nine-possession validation; not independent full-match evaluation"
+}
