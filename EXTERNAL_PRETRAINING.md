@@ -43,3 +43,10 @@ were checked. The full 122-test snapshot passed on Kaggle GPU. Experiment 25
 then fixes the target-window owner-only comparison before reading target scores.
 Experiment 24 separately tests full weak H/A/D supervision against an invariant
 logistic dead/live baseline with the frozen point owner.
+
+Experiment 24 also passed its fixed weak external gate: macro frame F1
+0.941231 -> 0.944240 and spellF1 0.525860 -> 0.570385. Its 26,659 temporal parameters,
+normalization and matched logistic baseline regenerated independently on CPU.
+All 126 tests passed on Kaggle GPU. The owner-only target ablation did not transfer
+the external improvement, so experiment 26 separately fixes three full-probability
+blends before seeing their target-window scores.

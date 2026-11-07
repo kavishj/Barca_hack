@@ -1,0 +1,30 @@
+{
+  "verified": true,
+  "external_gate_passed": true,
+  "external_scores": {
+    "baseline": {
+      "spell_f1_mean": 0.5258603736479843,
+      "macro_f1": 0.9412307268752883,
+      "accuracy": 0.9385363312787568,
+      "n_gt_spells": 384,
+      "n_pred_spells": 633
+    },
+    "temporal": {
+      "spell_f1_mean": 0.5703853955375254,
+      "macro_f1": 0.9442399068563877,
+      "accuracy": 0.942623780999508,
+      "n_gt_spells": 384,
+      "n_pred_spells": 602
+    }
+  },
+  "target_match_score": false,
+  "normalization_and_baseline_use_games_1_2_only": true,
+  "baseline_regenerated": true,
+  "held_out_fixture_unused_for_fitting": true,
+  "source_and_feature_hashes_verified": true,
+  "fixed_60_epochs_no_early_stopping": true,
+  "predictions_regenerated_from_weights_on_cpu": true,
+  "temporal_parameters": 26659,
+  "target_labels_or_observations_attached": false,
+  "limitation": "Weak public event-derived H/A/D metrics; two predeclared external hypotheses, not a target-match or independent final score"
+}
