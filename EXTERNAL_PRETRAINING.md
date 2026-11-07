@@ -25,11 +25,21 @@ and instantaneous probe feed a shared temporal residual owner and invariant
 turnover head. Team and half boundaries are preserved; synthetic missing-ball
 blocks are generated independently of labels.
 
-Sample Game 3 is reserved for a single conditional external transfer gate after
+Sample Game 3 supplies the conditional external transfer gate after
 the fixed final epoch. Its XML metadata identifies DEMO_1002 dated 2020-05-08; its
 two-goal sequence and half durations differ from the target fixture. Three pinned
 files (metadata XML, FIFA tracking text and event JSON) are hash-checked. The
 parser follows roster sections and goalkeeper identities rather than assuming a
 fixed player column order. Neither Game 3 nor target-match observations or labels
-fit temporal normalization, parameters, checkpoints or hyperparameters. External
-conditional owner/turnover metrics do not measure target-match spell F1.
+fit temporal normalization, parameters, checkpoints or hyperparameters. Experiments 23/24 declare two external hypotheses before seeing either new
+Game-3 metric, so this is a shared development check rather than an independent
+final benchmark. External metrics do not measure target-match spell F1.
+
+Experiment 23 passed its fixed external gate: conditional live-owner macro F1
+0.916737 -> 0.945819 and typed turnover F1 within 0.5 s 0.254902 -> 0.399317.
+The final 26,594-parameter temporal model and its predictions were regenerated
+and independently scored on CPU; source hashes and Games-1/2-only normalization
+were checked. The full 122-test snapshot passed on Kaggle GPU. Experiment 25
+then fixes the target-window owner-only comparison before reading target scores.
+Experiment 24 separately tests full weak H/A/D supervision against an invariant
+logistic dead/live baseline with the frozen point owner.

@@ -1,0 +1,29 @@
+{
+  "verified": true,
+  "external_gate_passed": true,
+  "external_scores": {
+    "baseline": {
+      "conditional_live_owner_macro_f1": 0.9167366967104179,
+      "typed_turnover_f1_05s": 0.2549019607843137,
+      "n_live_frames": 97198,
+      "n_gt_turnovers": 182,
+      "n_pred_turnovers": 430
+    },
+    "temporal": {
+      "conditional_live_owner_macro_f1": 0.9458185279280991,
+      "typed_turnover_f1_05s": 0.3993174061433447,
+      "n_live_frames": 97198,
+      "n_gt_turnovers": 182,
+      "n_pred_turnovers": 404
+    }
+  },
+  "target_match_score": false,
+  "normalization_uses_games_1_2_only": true,
+  "held_out_fixture_unused_for_fitting": true,
+  "source_and_feature_hashes_verified": true,
+  "fixed_60_epochs_no_early_stopping": true,
+  "predictions_regenerated_from_weights_on_cpu": true,
+  "temporal_parameters": 26594,
+  "target_labels_or_observations_attached": false,
+  "limitation": "Conditional metrics on one event-derived external fixture, not target-match spell F1"
+}
