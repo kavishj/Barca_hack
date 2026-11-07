@@ -401,3 +401,15 @@ before target OOF expansion. These conditional external scores do not satisfy
 the requested target-match F1. No Game-3 checkpoint or hyperparameter selection.
 If this gate passes, preregister the target comparison before reading new target
 scores; retain the current fixed predictions and all external negative results.
+
+Implementation details fixed before fitting: evaluate typed turnovers using both
+source and destination (`typed='pair'`), one-to-one matching within 12 frames at
+25 Hz. Interpolate conditional H/A probabilities to the original frame clock and
+take the larger probability, with H on exact ties; no label-derived D gating or
+boundary threshold in this external check. Restrict metric runs to known live
+reference spans, while predictions themselves never see the reference. Fit shared
+normalization moments on unmasked Games 1/2 observations, pool both teams, clip
+normalized inputs to +/-8, and retain unscaled frozen point logits for the
+residual head. Fixed renewed ball-mask blocks have uniform lengths 5..100 coarse
+steps and geometric unmasked gaps averaging 210 steps. Loss masks respect the
+assigned known-live run, excluding D/X and half edges from boundary supervision.
