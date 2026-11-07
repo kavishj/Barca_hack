@@ -476,3 +476,28 @@ Evaluate only that selected policy on unchanged, reused main validation. Record
 all variants and failures, complete graded coverage and regeneration checks.
 The public external check and reused target windows do not establish independent
 full-match generalization; the target remains official target-match spellF1 0.80.
+
+## Experiment 26, fixed after experiment 24's gate and before target H/A/D scores
+
+The three-state external temporal model passed its fixed Game-3 check: weak
+external macro frame F1 0.941231 -> 0.944240 and spellF1 0.525860 -> 0.570385.
+Freeze the final 60-epoch checkpoint, source-only normalization and encoder/probe.
+The owner-only target ablation (25) did not improve OOF and retained the typed
+control; do not retune that ablation on main validation.
+
+Compare the same two controls (experiment-20 fixed and experiment-21 typed-gated)
+with three fixed full-probability blends. Start with the experiment-20 target
+H/A/D posterior. Average it with the frozen external three-state temporal
+posterior at external weights 0.25, 0.5 and 1.0 across the graded timeline.
+Interpolate external three-state probabilities within each half and preserve
+normalization. No target calibration, manual missing-ball override or label-based
+gating. Keep switch cost 8, the original fold duration priors and maximum of
+graph/instantaneous-owner boundaries; do not use the new boundary head yet.
+Known kickoff D facts remain mandatory. No state or decoder fitting.
+
+Use the matched three-seed graph folds, unchanged references, five whole-window
+holdouts and 60-second purge. Controls must reproduce earlier predictions. Select
+pooled OOF spellF1 with controls first on ties and write the decision before
+scoring only the selected policy on reused main validation. Keep all failures;
+an external score or frame F1 above 0.80 does not meet the target-match spellF1
+goal, and repeated window selection does not establish independent generalization.
