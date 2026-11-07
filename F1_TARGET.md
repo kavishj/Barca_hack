@@ -315,3 +315,29 @@ training-only durations; select pooled OOF spellF1 before one main scoring.
 External pretraining/probe training scores do not count toward the requested
 target-match F1. Archive every variant. This ensemble-size clarification is
 recorded before probe fitting or access to experiment 19's results.
+
+## Experiment 21, fixed before typed-adaptive decoding
+
+Experiment 20 matches 24/33 OOF possessions at tIoU 0.3/0.4 but only 10/33 at
+0.7. Its fixed cost 8 can erase subsecond turnovers even with perfect emissions.
+Keep its selected external-owner weight 1, all matched three-seed scores, original
+training durations and decoder candidate graph unchanged. Compare four policies:
+
+1. Experiment-20 fixed-8 control, unchanged.
+2. Typed fixed-8: H/A transitions use max(graph boundary, external turnover),
+   while entering/leaving D uses the graph boundary only.
+3. Typed adaptive: use policy 2, replacing only the H/A switch fee by
+   `8 * training_turnover_band_prior / (external_turnover + prior)`.
+4. Confidence-gated typed adaptive: attenuate external turnover variation by
+   the geometric mean of adjacent graph confidence scores and require both
+   observations to have observed ball position and valid ball velocity. Gate
+   scores at missing-ball frames. Entering/leaving D still uses policy 2.
+
+Fit the turnover-band prior on corresponding fold-training labels only: radius-3
+bands around known H/A changes divided by usable known live frames, with Jeffreys
+half-count smoothing. Exclude unknown edges. Keep the original boundary log
+penalty, weak duration preferences and positive transition fees; add no hard
+minimum duration, transition reward, state reweighting or parameter grid.
+Use the same candidate boundaries for all policies. Select pooled OOF spellF1,
+control-first ties, save the decision, then score only that policy on unchanged
+main validation. Save the global training prior for label-free inference.
