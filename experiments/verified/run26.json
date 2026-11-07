@@ -1,0 +1,52 @@
+{
+  "verified": true,
+  "selected": "typed_gated",
+  "oof": {
+    "external_0.25": {
+      "spell_f1_mean": 0.5399999999999999,
+      "macro_f1": 0.8157689051223641,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "external_0.5": {
+      "spell_f1_mean": 0.5263157894736842,
+      "macro_f1": 0.788067546147567,
+      "n_gt_spells": 33,
+      "n_pred_spells": 24
+    },
+    "external_1.0": {
+      "spell_f1_mean": 0.4918032786885246,
+      "macro_f1": 0.750281885818155,
+      "n_gt_spells": 33,
+      "n_pred_spells": 28
+    },
+    "fixed": {
+      "spell_f1_mean": 0.6066666666666667,
+      "macro_f1": 0.811964439152863,
+      "n_gt_spells": 33,
+      "n_pred_spells": 27
+    },
+    "typed_gated": {
+      "spell_f1_mean": 0.6153846153846153,
+      "macro_f1": 0.8026183759663641,
+      "n_gt_spells": 33,
+      "n_pred_spells": 32
+    }
+  },
+  "main": {
+    "spell_f1_mean": 0.39999999999999997,
+    "macro_f1": 0.4216842534482208,
+    "n_gt_spells": 9,
+    "n_pred_spells": 10
+  },
+  "fold_scores_verified": 25,
+  "pooled_scores_verified": 5,
+  "fold_only_calibrations_and_priors_verified": true,
+  "selected_predictions_regenerate_byte_identically": true,
+  "source_inputs_hashes_verified": true,
+  "reference_files_unchanged": true,
+  "known_dead_violations": 0,
+  "full_graded_coverage": true,
+  "limitation": "Reused training OOF selection and reused nine-possession draft validation; no independent full-match score",
+  "three_state_target_scores_regenerate_exactly_from_weights": true
+}
