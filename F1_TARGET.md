@@ -341,3 +341,21 @@ minimum duration, transition reward, state reweighting or parameter grid.
 Use the same candidate boundaries for all policies. Select pooled OOF spellF1,
 control-first ties, save the decision, then score only that policy on unchanged
 main validation. Save the global training prior for label-free inference.
+
+## Experiment 22, fixed before visibility-likelihood calibration
+
+Known training frames have missing ball observations in 66.7% of D versus 14.7%
+of live play. Test whether the D posterior relies too much on this marginal
+observation cue. Fit `P(visible | D)` and `P(visible | live)` with Jeffreys
+half-count smoothing on each corresponding training fold only. For observed
+visibility v, subtract `gamma * log(P(v|D)/P(v|live))` from the graph's dead/live
+log odds. Preserve its conditional H/A ratio, then apply the unchanged external
+owner mixture. This is a nuisance-feature ablation, not a guaranteed causal or
+unbiased posterior correction. Use gamma 0, 0.5 or 1; no fitted temperature/grid.
+
+Cross those three fixed values with the fixed-8 decoder and experiment 21's
+OOF-selected policy (deduplicate if it is fixed). Refit any turnover prior only
+on the corresponding training fold. No neural/encoder/probe refitting, labels,
+manual rules, duration changes or main-based parameter choices. Prefer lower
+gamma and then the fixed decoder on exact OOF ties. Select pooled training OOF
+spellF1 before one unchanged main evaluation; retain all failed variants.
