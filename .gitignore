@@ -68,7 +68,8 @@ env/
 #
 # Any CSV is a set of frame labels or a data export until proven otherwise: a submission renamed
 # for upload (<team_name>.csv) or an exported hand-label file can land anywhere in the tree. Only
-# the public ground truth and the four baselines are let back in.
+# the public ground truth, the four baselines and the explicit prediction
+# exception at the end of this file are let back in.
 *.csv
 !evaluation/gt/*_possession_gt_public.csv
 !evaluation/results/baseline_*.csv
@@ -79,9 +80,15 @@ env/
 *.jpg
 *.jpeg
 
-# Learned checkpoints, feature caches and licensed-data-derived artifacts stay private.
+# Training outputs and observation caches stay out of source control.
+# A release may distribute selected model weights, with third-party attribution;
+# frame-level licensed observation caches must remain private.
 *.pt
 *.pth
 *.joblib
 *.npz
 *.npy
+
+# Explicitly authorized algorithmic output for the preserved graph/audio model.
+# This is generated prediction data, not private possession ground truth.
+!submissions/Barca_hack_possession.csv

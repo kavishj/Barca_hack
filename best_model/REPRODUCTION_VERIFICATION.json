@@ -1,0 +1,39 @@
+{
+  "cached_cpu": {
+    "prediction_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "expected_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "matches_preserved_candidate": true,
+    "n_frames": 199319,
+    "device": "cpu",
+    "input_mode": "saved_observation_caches",
+    "target_reference_labels_used": false,
+    "stored_predictions_read": false
+  },
+  "extracted_portable_cpu": {
+    "prediction_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "expected_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "matches_preserved_candidate": true,
+    "n_frames": 199319,
+    "device": "cpu",
+    "input_mode": "saved_observation_caches",
+    "target_reference_labels_used": false,
+    "stored_predictions_read": false
+  },
+  "raw_cuda": {
+    "prediction_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "expected_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+    "matches_preserved_candidate": true,
+    "n_frames": 199319,
+    "device": "cuda",
+    "input_mode": "original_assets",
+    "target_reference_labels_used": false,
+    "stored_predictions_read": false,
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "gpu": "Tesla T4",
+    "observation_caches_attached": false,
+    "stored_predictions_attached": false,
+    "human_annotation_files_attached": false
+  },
+  "raw_reproduction_notebook": "https://www.kaggle.com/code/kavish03/barca-best-reproduction-072-v1"
+}

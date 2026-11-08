@@ -1,5 +1,18 @@
 # Best observed validation candidate: graph + PANNs + TCN
 
+## GitHub download
+
+Download `barca_best_code_weights.zip` from
+[release best-graph-panns-072-v1](https://github.com/kavishj/Barca_hack/releases/tag/best-graph-panns-072-v1).
+It contains the companion weights, manifest and pinned inference source needed
+by this runner. The source-only `best_model/` directory in a clone is not a
+complete installation. The [main README](../README.md) explains the design
+decisions, results, exact commands and research training pipeline.
+
+The prediction CSV is also tracked at
+[submissions/Barca_hack_possession.csv](../submissions/Barca_hack_possession.csv)
+and attached to the release. Licensed observation caches are not uploaded.
+
 This is the preserved candidate with **0.7200 validation spell F1** and
 **0.679217 frame macro F1**. Its validation window contains 4,078 known frames
 and nine live-possession spells. The window has been reused during development;

@@ -1,0 +1,13 @@
+{
+  "tag": "best-graph-panns-072-v1",
+  "files": {
+    "barca_best_code_weights.zip": {
+      "sha256": "f19d9472ede53c435a7f0b02d0b1a7021d3ac9da79edd75e2bb821b144e20749",
+      "bytes": 22181972
+    },
+    "Barca_hack_possession.csv": {
+      "sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+      "bytes": 1682773
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "model": "Preserved PANNs + player-ball graph + shared TCN, three seeds",
+  "n_frames": 199319,
+  "fps": 25,
+  "halves": [
+    [
+      1,
+      11185,
+      90651
+    ],
+    [
+      2,
+      110808,
+      190197
+    ]
+  ],
+  "prediction_sha256": "c5dd08253f385e37cbdcb0f32006fde09ea65ada622a8f9548524cab6d633857",
+  "observed_draft_validation_spell_f1": 0.72,
+  "observed_draft_validation_frame_macro_f1": 0.679217402885496,
+  "validation_limitation": "Reused 4078-frame, nine-live-spell window; no independent full-match score or 0.80 claim",
+  "model_files_sha256": {
+    "model/preprocessing/symmetric.npz": "dfdc94c809be26d71ce11b57bdb1f8e6f13a7ec0155d5bbc0f5fb2cf5847b0de",
+    "model/preprocessing/audio_normalizer.npz": "51a4805ab1f860e1d943c06712bfdb82669c77d99f067a7104a97399c2f51f16",
+    "model/panns/Cnn6_mAP=0.343.pth": "8a17541944f2623a2a0164e072ac2f915dcedca99968083cc44bfbc7eb682275",
+    "model/graph_tcn/seed_2.json": "bb1cc69e30b18a95533c69c2c47182212013cadf89a268af03a29beb161e5df0",
+    "model/graph_tcn/seed_1.json": "6b4862f120341187432ccfab49863cfd47d08845c2e399a58ae8755866f617ac",
+    "model/graph_tcn/seed_0.json": "c7ae589cb734466116278b3ecc0faf3e3fb82f09455fffb47d572bfe78d8b043",
+    "model/graph_tcn/seed_2.pt": "abd74efd4d8ee29e2c19b0fb0bf150d61641fa4bafd8fc8d6d84cfc4fe9ca72b",
+    "model/graph_tcn/model.json": "2153c3671c87407fb0b4762622518759ea3507391fe3188f656fb0958c2ba67e",
+    "model/graph_tcn/seed_1.pt": "08cd74e9d9a267644d1abfa711544082d300b66ae36119331cab7c15d5b0c8d7",
+    "model/graph_tcn/seed_0.pt": "26768c9c289bb4feca55b8395508f808bec7e65b478b4129872fab74f3af6630"
+  },
+  "cache_files_sha256": {
+    "graph.npz": "a0ccbe86c2aa2a39a9fb74d6696849a61df101c03a23f316556b1f8594527007",
+    "audio_cache.npz": "189320b8b65c1384920aca916fdf9ce21d4944f6307d827b47f626568c63bc59",
+    "features.npz": "dc8c85c46bb381eaa8b1bb6deeb004f458165237bb00b7e89ba4fc4a756f805a"
+  },
+  "raw_inputs": {
+    "video": {
+      "name": "BAR-ATH_tactical.mp4",
+      "sha256": "ff249f072aa7cd89a4a7f603a08f399aa0d34bd429982c847cd4a9373f645f14"
+    },
+    "atd_meta": {
+      "name": "BAR-ATH_tactical_atd.xml",
+      "sha256": "327e35e32e46a647389b88f883d4f9a2ab931e3e6148aef2fcf8f22b1e93c43a"
+    },
+    "atd_raw": {
+      "name": "BAR-ATH_tactical_atd.txt",
+      "sha256": "f130e350d2bfdf734b7e32f072931fccc6d015c1e837d082064875fe0a700431"
+    },
+    "homography": {
+      "name": "BAR-ATH_tactical_homography.csv",
+      "sha256": "421c81abe16f0912dc45c2541f9bf19dd5660066397a3dcc043038a1b61c28c3"
+    },
+    "smart_tagging": {
+      "name": "BAR-ATH_tactical_smart_tagging.xml",
+      "sha256": "0594d35e3df01b9c5002372d8615e2e8ef5379ac8f4e84c5ef7a53f4304c9019"
+    }
+  },
+  "source_git_checkpoint": "8d94d724e872cf908f1d04ed56b293531231d7c1",
+  "source_files_sha256": {
+    "predict_best.py": "8a35926425bfdf6af63b7c6f4ee5a639141ff7cb4aecb3b4039721d3e6cbaa72",
+    "games.py": "3b2122794e9e0476e2b3a871d14880e5fa47c4feaeacf99caef054c2309076ce",
+    "possession/__init__.py": "3f220e1f3419a455bcdc35c2d48d410ff95093b03e136825c60431317ffce80a",
+    "possession/audio.py": "d7495979e368650869f22ac6514f8786e0f5b484ad77956d3142a00db8c38afe",
+    "possession/signals.py": "6d3e9b707c7b840371c056aa18c47b5b39e685fe0d1093e35d4b6ae02450f5b8",
+    "possession/data.py": "796a676afa9576d818e178d51c2d63cc42918aa7500a90bb317aa6a90aa25e96",
+    "relational_possession/model.py": "810777f9e150b9495188e9a38b38e8a11b459511d1dd3779f94ebb0170d890cd",
+    "relational_possession/experiment.py": "51f7d3d9b1d6abd950830625961eab8e55e719de5d935e304b24fc886038d61d",
+    "relational_possession/__init__.py": "06638816ee2368b7f254b78bad6f673578169a042c6c631b8a9a44ae44f6ce57",
+    "relational_possession/__main__.py": "89bfc5bdf2fb002323c821dce67de4f9473105205cec85d55eb4213e073cac73",
+    "relational_possession/data.py": "b71fff32f19191aaf40b7be09cf4ebeb61d1837acc4961959f757ee5ba7da3bc",
+    "relational_possession/loss.py": "2d71eab17d5df1259e75c7ad7d82ad2fec017a7f345d535a95734bc094e54056",
+    "relational_possession/engine.py": "76c2c6b9bc9a6db8c9c2eab88d7b2a78e1e98c55106bb86308688dc5cd6a6c48",
+    "learned_possession/model.py": "bf1f16a6ab617e4cd00c451279e35934db7f663b8a46f07e5f72f19ed1bb68f5",
+    "learned_possession/__init__.py": "3c561cfc969cafb58c8336dab0e992943086b94a023d7ed5fb00d3d5c0def62e",
+    "learned_possession/segment.py": "18275ae4bb311d6a6514b9c114dfa6cca60a832526f07b4458a8e8af374a3a3d",
+    "learned_possession/__main__.py": "9aa319e2a6113ab1714723ff5db0570b907592b25790cdbe17879817f138efba",
+    "learned_possession/features.py": "57c6c26b237f7efd7d5b2b927da48ed0bb7b2940c9318aa9b2ddde2252f72ce0",
+    "structured_possession/__init__.py": "4df957b4308d7ebf6d5d916cd66e02f829f8f8fcb43807d3f6a2d9028e4d9e6b",
+    "structured_possession/features.py": "8c0f26eec5fbdca091e0d146d3cab896a0353ffc21a0c3e8679c4b5c40fb7050",
+    "temporal_possession/network.py": "d4ef2a4fb7412ead6904734311b88364e013747186c460fd6e7fc558fb9cfbc3",
+    "temporal_possession/experiment.py": "04852553af5ca0613e7ef59cc849fb14852527da7fc4bcfa6cd6a48c0547fde4",
+    "temporal_possession/__init__.py": "af78210cd9bc748da8b1687b6fd7b7906241623bb2d5e621f03a471585c4bade",
+    "temporal_possession/audio.py": "ef581d4c92c7408ba6b1d334ebc272c5b00755fe9c16b81c368401a63052d6b5",
+    "evaluation/validate_submission.py": "07ac29499acbd337e1dc1de1832d63f6e1fa1d981e22f6ad08212529e2bbee14",
+    "evaluation/possession_metrics.py": "341bad48904b489d6e875397b27687f5d6a4d22a397f3dc8af3a00d48f16874d"
+  }
+}

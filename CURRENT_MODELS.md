@@ -1,8 +1,14 @@
 # Current models and reproduction
 
+The preserved 0.7200 graph/audio candidate now has a self-contained
+[GitHub release](https://github.com/kavishj/Barca_hack/releases/tag/best-graph-panns-072-v1),
+with model weights and a prediction CSV. Use the [main README](README.md) for
+the supported raw-asset reproduction route. The cache-based research commands
+below remain available to collaborators with the exact private observations.
+
 The official 0.80 spellF1 target is **not reached**. The original graph + audio
-TCN retains the highest observed draft-validation spellF1, **0.7200**. Its private
-prediction file and weights remain unchanged.
+TCN retains the highest observed draft-validation spellF1, **0.7200**. Its
+preserved prediction file and weights remain unchanged.
 
 The direct external ownership expert reached matched training-window OOF
 spellF1 **0.6067**, with frame macro F1 **0.8120**. Its single OOF-selected main
@@ -22,7 +28,8 @@ remain frozen, and the final model regenerated from weights on CPU. It is an
 archived experiment rather than a promoted replacement; fixed probability fusion
 did not improve spellF1. The fixed 20-epoch
 comparison also retained the control. A separate fixed tabular dead-ball expert
-also retained the control. A pinned AudioSet AST replacement is now being tested.
+also retained the control. A pinned AudioSet AST replacement is implemented;
+see the experiment ledger for the recorded checks and measured results.
 
 All five target training windows and the nine-possession main validation have
 already been reused. Model/decoder selection uses OOF, then only the selected
