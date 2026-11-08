@@ -18,6 +18,7 @@ selected validation score is 0.5500, so it is not the model packaged here.
 - `TECHNICAL_MODEL.md`: architecture, training and evaluation details.
 
 The separate `Barca_hack_possession.csv` is the submission-format prediction file.
+The ready bundle also contains a copy under `predictions/`.
 No competition form has been submitted. Its SHA-256 is:
 
 ```
