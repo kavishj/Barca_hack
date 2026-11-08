@@ -21,7 +21,7 @@ own licensed match bundle.
 | Item | Location | Purpose |
 |---|---|---|
 | Prediction CSV | [submissions/Barca_hack_possession.csv](submissions/Barca_hack_possession.csv) | Preserved, unedited algorithm output in submission format |
-| Code and weights | [Release `best-graph-panns-072-v1`](https://github.com/kavishj/Barca_hack/releases/tag/best-graph-panns-072-v1) | Approximately 22 MB ZIP with source, three checkpoints, preprocessing, frozen PANNs checkpoint, manifest and reproduction records |
+| Code and weights | [releases/barca_best_code_weights.zip](releases/barca_best_code_weights.zip), linked from the [release page](https://github.com/kavishj/Barca_hack/releases/tag/best-graph-panns-072-v1) | Approximately 22 MB ZIP with source, three checkpoints, preprocessing, frozen PANNs checkpoint, manifest and reproduction records |
 | Runner source | [best_model/predict_best.py](best_model/predict_best.py) | Entry point included in the release; run it from the complete extracted ZIP |
 | Technical details | This README and [best_model/TECHNICAL_MODEL.md](best_model/TECHNICAL_MODEL.md) | Design decisions, training, measurements and limitations |
 | Experiment history | [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md), [F1_TARGET.md](F1_TARGET.md) | Results and fixed protocols, including unsuccessful alternatives |
@@ -244,19 +244,19 @@ See [RELATIONAL_EXPERIMENT.md](RELATIONAL_EXPERIMENT.md),
 ### 1. Download
 
 Open the [release page](https://github.com/kavishj/Barca_hack/releases/tag/best-graph-panns-072-v1)
-and download `barca_best_code_weights.zip`. The separate
-`Barca_hack_possession.csv` is available if you only need predictions. All model
+and follow its model-bundle link, or open
+[releases/barca_best_code_weights.zip](releases/barca_best_code_weights.zip) and
+choose **Download raw file**. The separate
+[Barca_hack_possession.csv](submissions/Barca_hack_possession.csv) is available if you only need predictions. All model
 weights, including PANNs, are bundled; inference needs no model-host API key.
 
-Alternatively, use GitHub CLI authenticated with repository access:
+Alternatively, clone with an account that has repository access. The ZIP is
+tracked directly in the repository and is included in a normal clone:
 
 ```bash
-gh release download best-graph-panns-072-v1 \
-  --repo kavishj/Barca_hack \
-  --pattern barca_best_code_weights.zip \
-  --pattern Barca_hack_possession.csv \
-  --dir ./downloads
-python -m zipfile -e downloads/barca_best_code_weights.zip ./downloads
+git clone https://github.com/kavishj/Barca_hack.git
+cd Barca_hack
+python -m zipfile -e releases/barca_best_code_weights.zip ./downloads
 cd downloads/barca_best_model
 ```
 
